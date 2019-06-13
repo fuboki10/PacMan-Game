@@ -67,6 +67,7 @@ void Game::clean()
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
+	cout << "Game Cleaned \n";
 }
 
 bool Game::GameLoop()
@@ -77,6 +78,7 @@ bool Game::GameLoop()
 		update();
 		render();
 	}
+	clean();
 	return 0;
 }
 
