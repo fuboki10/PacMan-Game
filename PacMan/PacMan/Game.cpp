@@ -5,6 +5,7 @@ Game::Game(void) : FPS(60)
 {
 	frameDelay = 1000/FPS;
 	GameIsRunning = false;
+	player = nullptr;
 	init("PacMan Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
 }
 void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullscreen)
@@ -27,9 +28,14 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 			renderer = SDL_CreateRenderer(window, -1, 0);
 			if (renderer)
 			{
-				cout << "renderer is created .. \n";
-				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+				cout << "renderer created .. \n";
+				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 				GameIsRunning = true;
+				 
+				// Create Objects 
+
+				player = new Player(renderer);
+
 			}
 		}
 	}
@@ -52,19 +58,22 @@ void Game::handleEvents()
 
 void Game::update()
 {
+	player->Update();
 }
 
 void Game::render()
 {
 	SDL_RenderClear(renderer);
 
-	// add stuff to render
+	// add stuff to render		
+	player->render();
 
 	SDL_RenderPresent(renderer);
 }
 
 void Game::clean()
 {
+	player->Clean();
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
