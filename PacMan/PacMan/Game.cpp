@@ -1,8 +1,9 @@
 #include "Game.h"
 
 
-Game::Game(void)
+Game::Game(void) : FPS(60)
 {
+	frameDelay = 1000/FPS;
 	GameIsRunning = false;
 	init("PacMan Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
 }
@@ -74,9 +75,17 @@ bool Game::GameLoop()
 {
 	while (running())
 	{
+		this->frameStart = SDL_GetTicks();
 		handleEvents();
 		update();
 		render();
+
+		this->frameTime = SDL_GetTicks() - this->frameStart;
+
+		if (this->frameDelay > this->frameTime)
+		{
+			SDL_Delay(this->frameDelay - this->frameTime);
+		}
 	}
 	clean();
 	return 0;
