@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PacMan", "PacMan\PacMan.vcxproj", "{5E115E9B-A868-4C67-B6CD-D99BC26A901C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PacMan", "PacMan\PacMan.vcxproj", "{C236C3C2-813E-4660-AEE9-A87572BCCEFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5E115E9B-A868-4C67-B6CD-D99BC26A901C}.Debug|Win32.ActiveCfg = Debug|Win32
-		{5E115E9B-A868-4C67-B6CD-D99BC26A901C}.Debug|Win32.Build.0 = Debug|Win32
-		{5E115E9B-A868-4C67-B6CD-D99BC26A901C}.Release|Win32.ActiveCfg = Release|Win32
-		{5E115E9B-A868-4C67-B6CD-D99BC26A901C}.Release|Win32.Build.0 = Release|Win32
+		{C236C3C2-813E-4660-AEE9-A87572BCCEFC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C236C3C2-813E-4660-AEE9-A87572BCCEFC}.Debug|Win32.Build.0 = Debug|Win32
+		{C236C3C2-813E-4660-AEE9-A87572BCCEFC}.Release|Win32.ActiveCfg = Release|Win32
+		{C236C3C2-813E-4660-AEE9-A87572BCCEFC}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
