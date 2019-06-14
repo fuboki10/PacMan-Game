@@ -1,5 +1,5 @@
 #include "Map.h"
-
+#include <iostream>
 
 Map::Map(const char* MapName, SDL_Renderer *renderer, int w, int h) : renderer(renderer)
 {
@@ -127,11 +127,12 @@ void Map::DrawMap()
 
 void Map::Update()
 {
-	player->Update();
+	player->Update(map);
 	for (auto monster : monsters)
 	{
-		monster->Update();
+		//monster->Update(map);
 	}
+	std::cout << "Player Score : " << player->getScore() << std::endl;
 }
 
 void Map::render()

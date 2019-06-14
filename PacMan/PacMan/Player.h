@@ -1,5 +1,6 @@
 #pragma once
 #include "TextureManager.h"
+#include "Utils.h"
 
 class Player
 {
@@ -14,10 +15,13 @@ public:
 	Player(const char* fileName1, const char* fileName2, SDL_Renderer* renderer, int x = 0, int y = 0, int spd = 0);
 	~Player(void);
 
-	void Update(bool x = false, bool y = false);
+	void Update(int map[20][25]);
+	bool Move(int row, int col, int map[20][25]);
 	void render();
 	void Clean();
 	void Draw(SDL_Rect dst);
+	void setScore(int sc);
+	int getScore() const;
 
 };
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "TextureManager.h"
+#include "Utils.h"
 
 class Monster
 {
@@ -13,8 +14,9 @@ public:
 	Monster(const char* fileName, SDL_Renderer* renderer, int x, int y, int spd);
 	~Monster(void);
 
-	void Update(bool x = false, bool y = false);
+	void Update(int map[20][25]);
 	void Clean();
 	void Draw(SDL_Rect dst);
+	bool Move(int row, int col, int map[20][25]);
 };
 
