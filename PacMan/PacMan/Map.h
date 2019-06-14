@@ -4,7 +4,7 @@
 #include "Coin.h"
 #include "Monster.h"
 #include "Wall.h"
-#include <list>
+#include<vector>
 
 class Map
 {
@@ -16,9 +16,9 @@ class Map
 	int map[20][25];
 
 	Player *player;
-	std::list<Monster*> monsters;
-	std::list<Coin*> coins;
-	std::list<Wall*> walls;
+	std::vector<Monster*> monsters;
+	std::vector<Coin*> coins;
+	std::vector<Wall*> walls;
 
 public:
 	Map(const char* MapName, SDL_Renderer *renderer, int w, int h);

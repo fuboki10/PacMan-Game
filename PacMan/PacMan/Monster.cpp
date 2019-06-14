@@ -47,11 +47,12 @@ bool Monster::Move(int row, int col, int map[20][25])
 
 void Monster::Update(int map[20][25])
 {
-	int row = ypos / 32;
-	int col = xpos / 32;
+	int row = ypos;
+	int col = xpos;
 	
-	for (int Move = Right; Move < Count; Move++)
+	for (int i = Right; i < Count; i++)
 	{
+		int Move = rand() % Count;
 		int new_row, new_col;
 		if (Move == Right)
 		{
@@ -60,14 +61,14 @@ void Monster::Update(int map[20][25])
 			
 			if (this->Move(new_row, new_col, map)) 
 			{
-				xpos = new_col * 32;
-				ypos = new_row * 32;
+				xpos = new_col;
+				ypos = new_row;
 
 				map[row][col] = 0;
-
+				
 				dst.x = xpos;
 				dst.y = ypos;
-
+				
 				break;
 			}
 
@@ -76,16 +77,17 @@ void Monster::Update(int map[20][25])
 		{
 			new_row = row;
 			new_col = col - 1;
+			
 			if (this->Move(new_row, new_col, map)) 
 			{
-				xpos = new_col * 32;
-				ypos = new_row * 32;
+				xpos = new_col;
+				ypos = new_row;
 
 				map[row][col] = 0;
-
+				
 				dst.x = xpos;
 				dst.y = ypos;
-
+				
 				break;
 			}
 		}
@@ -93,16 +95,17 @@ void Monster::Update(int map[20][25])
 		{
 			new_row = row - 1;
 			new_col = col;
+			
 			if (this->Move(new_row, new_col, map)) 
 			{
-				xpos = new_col * 32;
-				ypos = new_row * 32;
+				xpos = new_col;
+				ypos = new_row;
 
 				map[row][col] = 0;
-
+				
 				dst.x = xpos;
 				dst.y = ypos;
-
+				
 				break;
 			}
 		}
@@ -110,16 +113,17 @@ void Monster::Update(int map[20][25])
 		{
 			new_row = row + 1;
 			new_col = col;
+			
 			if (this->Move(new_row, new_col, map)) 
 			{
-				xpos = new_col * 32;
-				ypos = new_row * 32;
+				xpos = new_col;
+				ypos = new_row;
 
 				map[row][col] = 0;
-
+				
 				dst.x = xpos;
 				dst.y = ypos;
-
+				
 				break;
 			}
 		}
@@ -134,5 +138,10 @@ void Monster::Clean()
 	
 void Monster::Draw(SDL_Rect dst)
 {
+	this->dst = dst;
+
+	xpos = dst.x / 32;
+	ypos = dst.y / 32;
+
 	TextureManager::Draw(Monster_Text, src, dst, renderer);
 }

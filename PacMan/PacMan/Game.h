@@ -24,7 +24,12 @@ class Game
 	Uint32 frameStart;
 	int frameTime;
 
+	static bool CanEat;
+
 public:
+	
+	static SDL_Event event;
+	
 	Game(void);
 	~Game(void);
 	bool GameLoop();
@@ -35,6 +40,7 @@ public:
 	void render();
 	void clean();
 
+	static bool canEat();
 	bool running() { return GameIsRunning; }
 };
 

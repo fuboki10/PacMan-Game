@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <iostream>
+#include "Game.h"
 
 Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* renderer, int x, int y, int spd) : renderer(renderer)
 {
@@ -44,8 +45,8 @@ void Player::Draw(SDL_Rect dst)
 {
 	destRect = dst;
 	
-	xpos = dst.x;
-	ypos = dst.y;
+	xpos = dst.x / 32;
+	ypos = dst.y / 32;
 
 	TextureManager::Draw(Player_Tex1, srcRect, destRect, renderer);
 }
@@ -63,6 +64,15 @@ bool Player::Move(int row, int col, int map[20][25])
 		map[row][col] = 2;
 		return 1;
 	}
+	// monst
+	if (map[row][col] == 3)
+	{
+		if (Game::canEat())
+		{
+
+		}
+		return 0;
+	}
 
 	map[row][col] = 2;
 	return 1;
@@ -72,12 +82,16 @@ bool Player::Move(int row, int col, int map[20][25])
 
 void Player::Update(int map[20][25])
 {
-	int row = ypos / 32;
-	int col = xpos / 32;
+	int row = ypos;
+	int col = xpos;
+
+	std::cout << "row = " << row << " col = " << col << '\n';
 	
-	for (int Move = Right; Move < Count; Move++)
+	for (int i = Right; i < Count; i++)
 	{
+		int Move = rand() % Count;
 		int new_row, new_col;
+
 		if (Move == Right)
 		{
 			new_row = row;
@@ -85,8 +99,8 @@ void Player::Update(int map[20][25])
 			
 			if (this->Move(new_row, new_col, map)) 
 			{
-				xpos = new_col * 32;
-				ypos = new_row * 32;
+				xpos = new_col;
+				ypos = new_row;
 
 				map[row][col] = 0;
 
@@ -97,15 +111,15 @@ void Player::Update(int map[20][25])
 			}
 
 		}
-		else if (Move == Left)
+		if (Move == Left)
 		{
-			std::cout << " left \n";
 			new_row = row;
 			new_col = col - 1;
+			
 			if (this->Move(new_row, new_col, map)) 
 			{
-				xpos = new_col * 32;
-				ypos = new_row * 32;
+				xpos = new_col;
+				ypos = new_row;
 
 				map[row][col] = 0;
 
@@ -122,8 +136,8 @@ void Player::Update(int map[20][25])
 
 			if (this->Move(new_row, new_col, map)) 
 			{
-				xpos = new_col * 32;
-				ypos = new_row * 32;
+				xpos = new_col;
+				ypos = new_row;
 
 				map[row][col] = 0;
 
@@ -140,8 +154,8 @@ void Player::Update(int map[20][25])
 
 			if (this->Move(new_row, new_col, map)) 
 			{
-				xpos = new_col * 32;
-				ypos = new_row * 32;
+				xpos = new_col;
+				ypos = new_row;
 
 				map[row][col] = 0;
 
@@ -164,7 +178,3 @@ int Player::getScore() const
 	return score;
 }
 
-void Player::render()
-{
-	TextureManager::Draw(Player_Tex1, srcRect, destRect, renderer);
-}

@@ -75,17 +75,20 @@ void Map::LoadMap(int arr[20][25])
 
 void Map::DrawMap()
 {
+
+	TextureManager::Draw(MapTexture, srcRect, dstRect, renderer);
+
 	int type = 0;
 	SDL_Rect dst;
 	dst.h = 32;
 	dst.w = 32;
-	auto Coin_it = coins.begin();
+	int cIdx = 0;
 	Coin* c;
 
-	auto Monster_it = monsters.begin();
+	int mIdx = 0;
 	Monster* m;
 
-	auto Wall_it = walls.begin();
+	int wIdx = 0;
 	Wall* w;
 
 	for (int row = 0; row < 20; row++)
@@ -100,22 +103,22 @@ void Map::DrawMap()
 			switch (type)
 			{
 			case 1 :
-				c = *Coin_it;
+				c = coins[cIdx];
 				c->Draw(dst);
-				++Coin_it;
+				++cIdx;
 				break;
 			case 2:
 				player->Draw(dst);
 				break;
 			case 3:
-				m = *Monster_it;
+				m = monsters[mIdx];
 				m->Draw(dst);
-				++Monster_it;
+				++mIdx;
 				break;
 			case -1:
-				w = *Wall_it;
+				w = walls[wIdx];
 				w->Draw(dst);
-				++Wall_it;
+				++wIdx;
 				break;
 			default:
 				break;
@@ -130,7 +133,7 @@ void Map::Update()
 	player->Update(map);
 	for (auto monster : monsters)
 	{
-		//monster->Update(map);
+		monster->Update(map);
 	}
 	std::cout << "Player Score : " << player->getScore() << std::endl;
 }

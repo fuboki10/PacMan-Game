@@ -17,7 +17,6 @@ public:
 
 	void Update(int map[20][25]);
 	bool Move(int row, int col, int map[20][25]);
-	void render();
 	void Clean();
 	void Draw(SDL_Rect dst);
 	void setScore(int sc);
