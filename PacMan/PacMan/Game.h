@@ -17,6 +17,7 @@ class Game
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	Map* map;
+	SDL_Event event;
 
 	bool GameIsRunning;
 	const int FPS;
@@ -27,8 +28,6 @@ class Game
 	static bool CanEat;
 
 public:
-	
-	static SDL_Event event;
 	
 	Game(void);
 	~Game(void);

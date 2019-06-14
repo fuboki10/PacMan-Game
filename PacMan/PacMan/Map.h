@@ -28,5 +28,6 @@ public:
 	void Update();
 	void render();
 	void Clean();
+	void setPlayerMovement(Moves move);
 };
 

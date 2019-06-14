@@ -7,7 +7,8 @@ enum Moves
 	Left,  // 1
 	UP,  // 2
 	Down,  // 3
-	Count // 4
+	Stop, // 4
+	Count
 };
 
 #endif

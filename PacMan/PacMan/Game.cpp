@@ -68,15 +68,35 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 
 void Game::handleEvents()
 {
-	SDL_PollEvent(&event);
-
-	switch (event.type)
+	while (SDL_PollEvent(&event))
 	{
-	case SDL_QUIT :
-		GameIsRunning = false;
-		break;
-	default:
-		break;
+		switch (event.type)
+		{
+		case SDL_KEYDOWN:
+            /* Check the SDLKey values and move change the coords */
+            switch( event.key.keysym.sym ){
+                case SDLK_LEFT:
+					map->setPlayerMovement(Left);
+                    break;
+                case SDLK_RIGHT:
+					map->setPlayerMovement(Right);
+                    break;
+                case SDLK_UP:
+					map->setPlayerMovement(UP);
+                    break;
+                case SDLK_DOWN:
+					map->setPlayerMovement(Down);
+                    break;
+                default:
+                    break;
+            }
+            break;
+		case SDL_QUIT :
+			GameIsRunning = false;
+			break;
+		default:
+			break;
+		}
 	}
 }
 

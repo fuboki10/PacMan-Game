@@ -19,6 +19,10 @@ Map::Map(const char* MapName, SDL_Renderer *renderer, int w, int h) : renderer(r
 
 }
 
+void Map::setPlayerMovement(Moves move)
+{
+	player->setDirection(move);
+}
 
 Map::~Map(void)
 {

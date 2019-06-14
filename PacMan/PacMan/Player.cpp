@@ -4,6 +4,8 @@
 
 Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* renderer, int x, int y, int spd) : renderer(renderer)
 {
+	Direction = Stop; // Count means stop
+
 	xpos = x;
 	ypos = y;
 	speed = 1;
@@ -69,7 +71,8 @@ bool Player::Move(int row, int col, int map[20][25])
 	{
 		if (Game::canEat())
 		{
-
+			std::cout << "Ate Monster ....\n";
+			return 1;
 		}
 		return 0;
 	}
@@ -83,89 +86,79 @@ bool Player::Move(int row, int col, int map[20][25])
 void Player::Update(int map[20][25])
 {
 	int row = ypos;
-	int col = xpos;
+	int col = xpos;	
+	int new_row, new_col;
 
-	std::cout << "row = " << row << " col = " << col << '\n';
-	
-	for (int i = Right; i < Count; i++)
+	if (Direction == Right)
 	{
-		int Move = rand() % Count;
-		int new_row, new_col;
-
-		if (Move == Right)
-		{
-			new_row = row;
-			new_col = col + 1;
+		new_row = row;
+		new_col = col + 1;
 			
-			if (this->Move(new_row, new_col, map)) 
-			{
-				xpos = new_col;
-				ypos = new_row;
-
-				map[row][col] = 0;
-
-				destRect.x = xpos;
-				destRect.y = ypos;
-
-				break;
-			}
-
-		}
-		if (Move == Left)
+		if (this->Move(new_row, new_col, map)) 
 		{
-			new_row = row;
-			new_col = col - 1;
+			xpos = new_col;
+			ypos = new_row;
+
+			map[row][col] = 0;
+
+			destRect.x = xpos;
+			destRect.y = ypos;
+		}
+
+	}
+	if (Direction == Left)
+	{
+		new_row = row;
+		new_col = col - 1;
 			
-			if (this->Move(new_row, new_col, map)) 
-			{
-				xpos = new_col;
-				ypos = new_row;
-
-				map[row][col] = 0;
-
-				destRect.x = xpos;
-				destRect.y = ypos;
-
-				break;
-			}
-		}
-		else if (Move == UP)
+		if (this->Move(new_row, new_col, map)) 
 		{
-			new_row = row - 1;
-			new_col = col;
+			xpos = new_col;
+			ypos = new_row;
 
-			if (this->Move(new_row, new_col, map)) 
-			{
-				xpos = new_col;
-				ypos = new_row;
+			map[row][col] = 0;
 
-				map[row][col] = 0;
-
-				destRect.x = xpos;
-				destRect.y = ypos;
-
-				break;
-			}
-		}
-		else if (Move == Down)
-		{
-			new_row = row + 1;
-			new_col = col;
-
-			if (this->Move(new_row, new_col, map)) 
-			{
-				xpos = new_col;
-				ypos = new_row;
-
-				map[row][col] = 0;
-
-				destRect.x = xpos;
-				destRect.y = ypos;
-
-				break;
-			}
+			destRect.x = xpos;
+			destRect.y = ypos;
 		}
 	}
+	else if (Direction == UP)
+	{
+		new_row = row - 1;
+		new_col = col;
+
+		if (this->Move(new_row, new_col, map)) 
+		{
+			xpos = new_col;
+			ypos = new_row;
+
+			map[row][col] = 0;
+
+			destRect.x = xpos;
+			destRect.y = ypos;
+		}
+	}
+	else if (Direction == Down)
+	{
+		new_row = row + 1;
+		new_col = col;
+
+		if (this->Move(new_row, new_col, map)) 
+		{
+			xpos = new_col;
+			ypos = new_row;
+
+			map[row][col] = 0;
+
+			destRect.x = xpos;
+			destRect.y = ypos;
+		}
+	}
+}
+
+void Player::setDirection(Moves Direction)
+{ 
+	this->Direction = Direction;
 }
 
 void Player::setScore(int sc)

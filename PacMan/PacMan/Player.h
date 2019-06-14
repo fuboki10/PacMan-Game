@@ -11,9 +11,13 @@ class Player
 	SDL_Rect srcRect, destRect;
 	SDL_Renderer* renderer;
 
+	Moves Direction;
+
 public:
 	Player(const char* fileName1, const char* fileName2, SDL_Renderer* renderer, int x = 0, int y = 0, int spd = 0);
 	~Player(void);
+
+	void setDirection(Moves Direction);
 
 	void Update(int map[20][25]);
 	bool Move(int row, int col, int map[20][25]);
