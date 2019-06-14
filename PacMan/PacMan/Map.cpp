@@ -9,8 +9,8 @@ Map::Map(const char* MapName, SDL_Renderer *renderer, int w, int h) : renderer(r
 
 	srcRect.x = 0;
 	srcRect.y = 0;
-	srcRect.w = 2950;
-	srcRect.h = 771;
+	srcRect.w = 1920;
+	srcRect.h = 1080;
 
 	dstRect.x = 0;
 	dstRect.y = 0;
@@ -31,7 +31,7 @@ Map::~Map(void)
 void Map::LoadMap(int arr[20][25])
 {
 
-	int type = 0;
+	Objects type = NOTHING;
 	
 	Coin* c;
 	Monster* m;
@@ -43,22 +43,22 @@ void Map::LoadMap(int arr[20][25])
 		{
 			map[row][col] = arr[row][col];
 
-			type = map[row][col];
+			type = Objects(map[row][col]);
 
 			switch (type)
 			{
-			case 1 :
+			case COIN:
 				c = new Coin("Asserts/Coin.png", renderer, row, col, 1);
 				coins.push_back(c);
 				break;
-			case 2:
+			case PLAYER:
 				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png", renderer, row , col); 
 				break;
-			case 3:
+			case MONSTER:
 				m = new Monster("Asserts/Monster.png", renderer, row, col, 1);
 				monsters.push_back(m);
 				break;
-			case -1:
+			case WALL:
 				w = new Wall("Asserts/Wall.png", renderer, row, col);
 				walls.push_back(w);
 				break;
@@ -80,9 +80,9 @@ void Map::LoadMap(int arr[20][25])
 void Map::DrawMap()
 {
 
-	TextureManager::Draw(MapTexture, srcRect, dstRect, renderer);
+	//TextureManager::Draw(MapTexture, srcRect, dstRect, renderer);
 
-	int type = 0;
+	Objects type = NOTHING;
 	SDL_Rect dst;
 	dst.h = 32;
 	dst.w = 32;
@@ -102,24 +102,24 @@ void Map::DrawMap()
 			dst.y = row * 32;
 			dst.x = col * 32;
 
-			type = map[row][col];
+			type = Objects(map[row][col]);
 
 			switch (type)
 			{
-			case 1 :
+			case COIN :
 				c = coins[cIdx];
 				c->Draw(dst);
 				++cIdx;
 				break;
-			case 2:
+			case PLAYER:
 				player->Draw(dst);
 				break;
-			case 3:
+			case MONSTER:
 				m = monsters[mIdx];
 				m->Draw(dst);
 				++mIdx;
 				break;
-			case -1:
+			case WALL:
 				w = walls[wIdx];
 				w->Draw(dst);
 				++wIdx;

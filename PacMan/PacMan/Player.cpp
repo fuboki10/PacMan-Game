@@ -4,12 +4,15 @@
 
 Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* renderer, int x, int y, int spd) : renderer(renderer)
 {
-	Direction = Stop; // Count means stop
+	Direction = Stop; // stop
+	angle = 0.0;
+	flip = SDL_FLIP_NONE;
 
 	xpos = x;
 	ypos = y;
 	speed = 1;
 	score = 0;
+	lifes = 3;
 
 	srcRect.x = srcRect.y = 0;
 	srcRect.h = 600;
@@ -50,24 +53,24 @@ void Player::Draw(SDL_Rect dst)
 	xpos = dst.x / 32;
 	ypos = dst.y / 32;
 
-	TextureManager::Draw(Player_Tex1, srcRect, destRect, renderer);
+	TextureManager::DrawWithAngle(Player_Tex1, srcRect, destRect, renderer, angle, NULL, flip);
 }
 
 bool Player::Move(int row, int col, int map[20][25])
 {
-	if (map[row][col] == -1 || row >= 20 || row < 0 || col >= 25 || col < 0)
+	if (map[row][col] == WALL || row >= 20 || row < 0 || col >= 25 || col < 0)
 	{
 		return 0;
 	}
 	// Coin
-	if (map[row][col] == 1)
+	if (map[row][col] == COIN)
 	{
 		score += 1;
-		map[row][col] = 2;
+		map[row][col] = PLAYER;
 		return 1;
 	}
 	// monst
-	if (map[row][col] == 3)
+	if (map[row][col] == MONSTER)
 	{
 		if (Game::canEat())
 		{
@@ -77,7 +80,7 @@ bool Player::Move(int row, int col, int map[20][25])
 		return 0;
 	}
 
-	map[row][col] = 2;
+	map[row][col] = PLAYER;
 	return 1;
 
 
@@ -99,10 +102,13 @@ void Player::Update(int map[20][25])
 			xpos = new_col;
 			ypos = new_row;
 
-			map[row][col] = 0;
+			map[row][col] = NOTHING;
 
 			destRect.x = xpos;
 			destRect.y = ypos;
+
+			angle = 0.0;
+			flip = SDL_FLIP_NONE;
 		}
 
 	}
@@ -116,10 +122,13 @@ void Player::Update(int map[20][25])
 			xpos = new_col;
 			ypos = new_row;
 
-			map[row][col] = 0;
+			map[row][col] = NOTHING;
 
 			destRect.x = xpos;
 			destRect.y = ypos;
+
+			angle = 0.0;
+			flip = SDL_FLIP_HORIZONTAL;
 		}
 	}
 	else if (Direction == UP)
@@ -132,10 +141,13 @@ void Player::Update(int map[20][25])
 			xpos = new_col;
 			ypos = new_row;
 
-			map[row][col] = 0;
+			map[row][col] = NOTHING;
 
 			destRect.x = xpos;
 			destRect.y = ypos;
+
+			angle = 270.0;
+			flip = SDL_FLIP_NONE;
 		}
 	}
 	else if (Direction == Down)
@@ -148,10 +160,13 @@ void Player::Update(int map[20][25])
 			xpos = new_col;
 			ypos = new_row;
 
-			map[row][col] = 0;
+			map[row][col] = NOTHING;
 
 			destRect.x = xpos;
 			destRect.y = ypos;
+
+			angle = 90.0;
+			flip = SDL_FLIP_NONE;
 		}
 	}
 }
@@ -171,3 +186,12 @@ int Player::getScore() const
 	return score;
 }
 
+void Player::setLifes(int l)
+{
+	lifes = l;
+}
+	
+int Player::getLifes()
+{
+	return lifes;
+}

@@ -28,17 +28,17 @@ Monster::~Monster(void)
 
 bool Monster::Move(int row, int col, int map[20][25])
 {
-	if (map[row][col] == -1 || row >= 20 || row < 0 || col >= 25 || col < 0)
+	if (map[row][col] == WALL || row >= 20 || row < 0 || col >= 25 || col < 0)
 	{
 		return 0;
 	}
-	if (map[row][col] == 1 || map[row][col] == 3 || map[row][col] == 2)
+	if (map[row][col] == COIN || map[row][col] == MONSTER || map[row][col] == PLAYER)
 	{
 		return 0;
 	}
-	else if (map[row][col] == 0)
+	else if (map[row][col] == NOTHING)
 	{
-		map[row][col] = 3;
+		map[row][col] = MONSTER;
 		return 1;
 	}
 
@@ -50,9 +50,9 @@ void Monster::Update(int map[20][25])
 	int row = ypos;
 	int col = xpos;
 	
-	for (int i = Right; i < Count; i++)
+	for (int i = Right; i < MOVES_NUM; i++)
 	{
-		int Move = rand() % Count;
+		int Move = rand() % MOVES_NUM;
 		int new_row, new_col;
 		if (Move == Right)
 		{
@@ -64,7 +64,7 @@ void Monster::Update(int map[20][25])
 				xpos = new_col;
 				ypos = new_row;
 
-				map[row][col] = 0;
+				map[row][col] = NOTHING;
 				
 				dst.x = xpos;
 				dst.y = ypos;
@@ -83,7 +83,7 @@ void Monster::Update(int map[20][25])
 				xpos = new_col;
 				ypos = new_row;
 
-				map[row][col] = 0;
+				map[row][col] = NOTHING;
 				
 				dst.x = xpos;
 				dst.y = ypos;
@@ -101,7 +101,7 @@ void Monster::Update(int map[20][25])
 				xpos = new_col;
 				ypos = new_row;
 
-				map[row][col] = 0;
+				map[row][col] = NOTHING;
 				
 				dst.x = xpos;
 				dst.y = ypos;
@@ -119,7 +119,7 @@ void Monster::Update(int map[20][25])
 				xpos = new_col;
 				ypos = new_row;
 
-				map[row][col] = 0;
+				map[row][col] = NOTHING;
 				
 				dst.x = xpos;
 				dst.y = ypos;
