@@ -18,8 +18,8 @@ Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* rende
 	srcRect.h = 600;
 	srcRect.w = 541;
 
-	destRect.x = xpos;
-	destRect.y = ypos;
+	destRect.x = xpos * 32;
+	destRect.y = ypos * 32;
 	destRect.h = destRect.w = 32;
 
 	Player_Tex1 = TextureManager::LoadTexture(fileName1, renderer);
@@ -78,13 +78,13 @@ bool Player::Move(int row, int col, int map[20][25], Objects& object)
 		{
 			object = MONSTER;
 			std::cout << "Ate Monster ....\n";
+			map[row][col] = PLAYER;
 		}
 		else
 		{
 			object = PLAYER;
 			std::cout << "Game Over ....\n";
 		}
-		map[row][col] = PLAYER;
 		return 1;
 	}
 
@@ -96,8 +96,8 @@ bool Player::Move(int row, int col, int map[20][25], Objects& object)
 
 void Player::Update(int map[20][25], Objects& object)
 {
-	int row = ypos;
-	int col = xpos;	
+	int col = xpos;
+	int row = ypos;	
 	int new_row, new_col;
 
 	if (Direction == Right)
@@ -107,13 +107,13 @@ void Player::Update(int map[20][25], Objects& object)
 			
 		if (this->Move(new_row, new_col, map, object)) 
 		{
-			xpos = new_col;
 			ypos = new_row;
+			xpos = new_col;
 
 			map[row][col] = NOTHING;
 
-			destRect.x = xpos;
-			destRect.y = ypos;
+			destRect.x = xpos * 32;
+			destRect.y = ypos * 32;
 
 			angle = 0.0;
 			flip = SDL_FLIP_NONE;
@@ -127,13 +127,13 @@ void Player::Update(int map[20][25], Objects& object)
 			
 		if (this->Move(new_row, new_col, map, object)) 
 		{
-			xpos = new_col;
 			ypos = new_row;
+			xpos = new_col;
 
 			map[row][col] = NOTHING;
 
-			destRect.x = xpos;
-			destRect.y = ypos;
+			destRect.x = xpos * 32;
+			destRect.y = ypos * 32;
 
 			angle = 0.0;
 			flip = SDL_FLIP_HORIZONTAL;
@@ -146,13 +146,13 @@ void Player::Update(int map[20][25], Objects& object)
 
 		if (this->Move(new_row, new_col, map, object)) 
 		{
-			xpos = new_col;
 			ypos = new_row;
+			xpos = new_col;
 
 			map[row][col] = NOTHING;
 
-			destRect.x = xpos;
-			destRect.y = ypos;
+			destRect.x = xpos * 32;
+			destRect.y = ypos * 32;
 
 			angle = 270.0;
 			flip = SDL_FLIP_NONE;
@@ -165,13 +165,13 @@ void Player::Update(int map[20][25], Objects& object)
 
 		if (this->Move(new_row, new_col, map, object)) 
 		{
-			xpos = new_col;
 			ypos = new_row;
+			xpos = new_col;
 
 			map[row][col] = NOTHING;
 
-			destRect.x = xpos;
-			destRect.y = ypos;
+			destRect.x = xpos * 32;
+			destRect.y = ypos * 32;
 
 			angle = 90.0;
 			flip = SDL_FLIP_NONE;

@@ -50,18 +50,18 @@ void Map::LoadMap(int arr[20][25])
 			switch (type)
 			{
 			case COIN:
-				c = new Coin("Asserts/Coin.png", renderer, row, col, 1);
+				c = new Coin("Asserts/Coin.png", renderer, col, row, 1);
 				coins.push_back(c);
 				break;
 			case PLAYER:
-				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png", renderer, row , col, 1, 1); 
+				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png", renderer, col , row, 1, 1); 
 				break;
 			case MONSTER:
-				m = new Monster("Asserts/Monster.png", renderer, row, col, 1);
+				m = new Monster("Asserts/Monster.png", renderer, col, row, 1);
 				monsters.push_back(m);
 				break;
 			case WALL:
-				w = new Wall("Asserts/Wall.png", renderer, row, col);
+				w = new Wall("Asserts/Wall.png", renderer, col, row);
 				walls.push_back(w);
 				break;
 			default:
@@ -204,6 +204,8 @@ void Map::Update()
 	{
 		if (player)
 			Delete(object, player->getPos());
+		if (!game->running())
+			return;
 	}
 
 	for (auto monster : monsters)
@@ -223,9 +225,6 @@ void Map::Update()
 
 	if (coins.size() == 0)
 		game->Ultimate(1);
-
-	if (player)
-		std::cout << "Player Score : " << player->getScore() << std::endl;
 }
 
 void Map::render()

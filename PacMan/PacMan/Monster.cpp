@@ -12,8 +12,8 @@ Monster::Monster(const char* fileName, SDL_Renderer* renderer, int x, int y, int
 	src.x = src.y = 0;
 	src.h = src.w = 256;
 
-	dst.x = xpos;
-	dst.y = ypos;
+	dst.x = xpos * 32;
+	dst.y = ypos * 32;
 	dst.h = dst.w = 32;
 
 	speed = spd;
@@ -71,13 +71,14 @@ SDL_Point Monster::getPos() const
 
 void Monster::Update(int map[20][25], Objects& object)
 {
-	int row = ypos;
 	int col = xpos;
-	
+	int row = ypos;
+	int new_row, new_col;
+
 	for (int i = Right; i < MOVES_NUM; i++)
 	{
-		int Move = rand() % MOVES_NUM;
-		int new_row, new_col;
+		int Move = rand() % Stop;
+
 		if (Move == Right)
 		{
 			new_row = row;
@@ -90,8 +91,8 @@ void Monster::Update(int map[20][25], Objects& object)
 
 				map[row][col] = NOTHING;
 				
-				dst.x = xpos;
-				dst.y = ypos;
+				dst.x = xpos * 32;
+				dst.y = ypos * 32;
 				
 				break;
 			}
@@ -109,8 +110,8 @@ void Monster::Update(int map[20][25], Objects& object)
 
 				map[row][col] = NOTHING;
 				
-				dst.x = xpos;
-				dst.y = ypos;
+				dst.x = xpos * 32;
+				dst.y = ypos * 32;
 				
 				break;
 			}
@@ -127,8 +128,8 @@ void Monster::Update(int map[20][25], Objects& object)
 
 				map[row][col] = NOTHING;
 				
-				dst.x = xpos;
-				dst.y = ypos;
+				dst.x = xpos * 32;
+				dst.y = ypos * 32;
 				
 				break;
 			}
@@ -145,8 +146,8 @@ void Monster::Update(int map[20][25], Objects& object)
 
 				map[row][col] = NOTHING;
 				
-				dst.x = xpos;
-				dst.y = ypos;
+				dst.x = xpos * 32;
+				dst.y = ypos * 32;
 				
 				break;
 			}
@@ -167,5 +168,5 @@ void Monster::Draw(SDL_Rect dst)
 	xpos = dst.x / 32;
 	ypos = dst.y / 32;
 
-	TextureManager::Draw(Monster_Text, src, dst, renderer);
+	TextureManager::Draw(Monster_Text, src, this->dst, renderer);
 }

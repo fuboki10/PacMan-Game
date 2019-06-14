@@ -14,8 +14,8 @@ Coin::Coin(const char* fileName, SDL_Renderer* renderer, int x, int y, int p) : 
 	src.w = 32;
 	src.h = 32;
 
-	dst.x = xpos;
-	dst.y = ypos;
+	dst.x = xpos * 32;
+	dst.y = ypos * 32;
 	dst.h = 32;
 	dst.w = 32;
 }

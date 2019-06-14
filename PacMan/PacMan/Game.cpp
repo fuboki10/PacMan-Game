@@ -15,7 +15,7 @@ int lvl1 [20][25] = {
 	{0,4,0,0,4,0,0,4,4,4,4,4,4,4,4,4,4,0,0,4,0,0,0,4,0},
 	{0,4,0,0,4,0,0,4,0,0,0,0,0,0,0,0,4,0,0,4,0,0,0,4,0},
 	{0,4,0,0,4,0,0,4,0,0,0,0,0,0,0,0,4,0,0,4,0,0,0,4,0},
-	{0,4,0,0,4,0,0,4,0,0,0,0,0,0,0,0,4,0,0,4,0,0,0,4,0},
+	{0,4,0,0,4,0,0,4,0,0,0,3,0,0,0,0,4,0,0,4,0,3,0,4,0},
 	{0,4,0,0,4,0,0,4,0,0,0,0,0,0,0,0,4,0,0,4,0,0,0,4,0},
 	{0,4,0,0,4,4,4,4,4,4,0,0,0,0,0,0,4,0,0,4,0,0,0,4,0},
 	{0,4,0,0,0,2,0,0,0,0,0,0,0,0,0,0,4,0,4,4,4,0,0,4,0},
@@ -62,11 +62,6 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 				menu = new Menu("Asserts/Background.png", "Asserts/GameOver.png", renderer, w, h, this); 
 
 				if (!menu)
-					throw SDL_Error;
-
-				map = new Map("Asserts/Background.png", renderer, Width, Height, this);
-				
-				if (!map)
 					throw SDL_Error;
 
 				StartGame(true);
@@ -143,6 +138,10 @@ void Game::update()
 	}
 	else
 	{
+		if (map)
+			delete map;
+		map = NULL;
+
 		menu->Update();
 	}
 }
@@ -165,12 +164,12 @@ void Game::StartGame(bool s)
 
 	if (GameIsRunning)
 	{
+		map = new Map("Asserts/Background.png", renderer, Width, Height, this);
+				
+		if (!map)
+			throw SDL_Error;
+
 		map->LoadMap(lvl1);
-	}
-	else
-	{
-		if (map)
-			map->Clean();
 	}
 }
 
@@ -197,10 +196,9 @@ bool Game::GameLoop()
 	{
 		this->frameStart = SDL_GetTicks();
 		
-		render();
 		handleEvents();
 		update();
-		
+		render();
 
 		this->frameTime = SDL_GetTicks() - this->frameStart;
 
