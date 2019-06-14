@@ -8,10 +8,9 @@
 #include <iostream>
 #include "Map.h"
 /* */
-
 using std::cout;
 using std::endl;
-
+class Map;
 class Game
 {
 	SDL_Window* window;
@@ -32,6 +31,7 @@ public:
 	Game(void);
 	~Game(void);
 	bool GameLoop();
+	void GameOver(int Score);
 	void init(const char* title, int xpos, int ypos, int w, int h, bool fullscreen);
 	
 	void handleEvents();

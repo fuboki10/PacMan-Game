@@ -56,7 +56,7 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 				GameIsRunning = true;
 				 
 				// Create Objects 
-				map = new Map("Asserts/Background.png", renderer, w, h);
+				map = new Map("Asserts/Background.png", renderer, w, h, this);
 
 				map->LoadMap(lvl1);
 
@@ -155,4 +155,11 @@ bool Game::canEat()
 Game::~Game(void)
 {
 	clean();
+}
+
+void Game::GameOver(int Score)
+{
+	std::cout << "GameOver ... Your Score : " << Score << '\n';
+	GameIsRunning = false;
+	SDL_Delay(3000);
 }

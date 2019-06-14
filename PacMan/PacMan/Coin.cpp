@@ -4,7 +4,7 @@
 Coin::Coin(const char* fileName, SDL_Renderer* renderer, int x, int y, int p) : renderer(renderer)
 {
 	Coin_Text = TextureManager::LoadTexture(fileName, renderer);
-	std::cout << "Coin Created .. \n";
+	
 	xpos = x;
 	ypos = y;
 	points = p;
@@ -31,8 +31,8 @@ void Coin::Draw(SDL_Rect dst)
 {
 	this->dst = dst;
 	
-	xpos = dst.x;
-	ypos = dst.y;
+	xpos = dst.x / 32;
+	ypos = dst.y / 32;
 
 	TextureManager::Draw(Coin_Text, src, dst, renderer);
 }
@@ -40,4 +40,14 @@ void Coin::Draw(SDL_Rect dst)
 void Coin::Clean()
 {
 	SDL_DestroyTexture(Coin_Text);
+}
+
+SDL_Point Coin::getPos() const
+{
+	SDL_Point P;
+	
+	P.x = xpos;
+	P.y = ypos;
+	
+	return P;
 }

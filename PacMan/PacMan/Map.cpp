@@ -1,7 +1,7 @@
 #include "Map.h"
 #include <iostream>
 
-Map::Map(const char* MapName, SDL_Renderer *renderer, int w, int h) : renderer(renderer)
+Map::Map(const char* MapName, SDL_Renderer *renderer, int w, int h, Game* game) : renderer(renderer), game(game)
 {
 	MapTexture = TextureManager::LoadTexture(MapName, renderer);
 	width = w;
@@ -52,7 +52,7 @@ void Map::LoadMap(int arr[20][25])
 				coins.push_back(c);
 				break;
 			case PLAYER:
-				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png", renderer, row , col); 
+				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png", renderer, row , col, 1, 1); 
 				break;
 			case MONSTER:
 				m = new Monster("Asserts/Monster.png", renderer, row, col, 1);
@@ -132,14 +132,86 @@ void Map::DrawMap()
 	}
 }
 
+int Map::Search(const Objects& object, SDL_Point p)
+{
+	SDL_Point p2;
+	if (object == COIN)
+	{
+		for (int i = 0; i < coins.size(); i++)
+		{
+			p2 = coins[i]->getPos();
+			if (p2.x == p.x && p2.y == p.y)
+			{
+				return i;
+			}
+		}
+	}
+
+	if (object == MONSTER)
+	{
+		for (int i = 0; i < monsters.size(); i++)
+		{
+			p2 = monsters[i]->getPos();
+			if (p2.x == p.x && p2.y == p.y)
+			{
+				player->setScore(player->getScore() + 5);
+				return i;
+			}
+		}
+	}
+}
+
+void Map::Delete(const Objects& object, const SDL_Point& p)
+{
+	int index = -1;
+
+	Coin* c;
+	Monster* m;
+
+
+	switch (object)
+	{
+	case COIN:
+		index = Search(object, p);
+		c = coins[index];
+		coins.erase(coins.begin() + index);
+		delete c;
+		break;
+	case MONSTER:
+		index = Search(object, p);
+		m = monsters[index];
+		monsters.erase(monsters.begin() + index);
+		delete m;
+		break;
+	case PLAYER:
+		GameOver();
+		break;
+	default:
+		break;
+	}
+}
+
 void Map::Update()
 {
-	player->Update(map);
+	Objects object = NOTHING;
+
+	if (player)
+		player->Update(map, object);
+
+	if (object != NOTHING)
+	{
+		if (player)
+			Delete(object, player->getPos());
+	}
+
 	for (auto monster : monsters)
 	{
-		monster->Update(map);
+		if (monster)
+			monster->Update(map);
 	}
-	std::cout << "Player Score : " << player->getScore() << std::endl;
+
+	if (player)
+		std::cout << "Player Score : " << player->getScore() << std::endl;
 }
 
 void Map::render()
@@ -150,17 +222,40 @@ void Map::render()
 void Map::Clean()
 {
 	SDL_DestroyTexture(MapTexture);
-	player->Clean();
+	
+	if (player)
+		player->Clean();
+	
 	for (auto coin : coins)
 	{
-		coin->Clean();
+		if (coin)
+			coin->Clean();
 	}
+	
 	for (auto monster : monsters)
 	{
-		monster->Clean();
+		if (monster)
+			monster->Clean();
 	}
+	
 	for (auto wall : walls)
 	{
-		wall->Clean();
+		if (wall)
+			wall->Clean();
+	}
+}
+
+void Map::GameOver()
+{
+	if (player->getLifes() == 1)
+	{
+		int score = player->getScore();
+		delete player;
+		player = NULL;
+		game->GameOver(score);
+	}
+	else
+	{
+		player->setLifes(player->getLifes() - 1);
 	}
 }

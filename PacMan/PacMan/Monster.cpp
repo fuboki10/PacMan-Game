@@ -17,7 +17,6 @@ Monster::Monster(const char* fileName, SDL_Renderer* renderer, int x, int y, int
 
 	speed = spd;
 
-	std::cout << "Monster Created ..\n";
 }
 
 
@@ -44,6 +43,17 @@ bool Monster::Move(int row, int col, int map[20][25])
 
 
 }
+
+SDL_Point Monster::getPos() const
+{
+	SDL_Point P;
+	
+	P.x = xpos;
+	P.y = ypos;
+	
+	return P;
+}
+
 
 void Monster::Update(int map[20][25])
 {
@@ -133,7 +143,6 @@ void Monster::Update(int map[20][25])
 void Monster::Clean()
 {
 	SDL_DestroyTexture(Monster_Text);
-	std::cout << "Monster Deleted .. \n";
 }
 	
 void Monster::Draw(SDL_Rect dst)

@@ -13,6 +13,7 @@ public:
 	Coin(const char* fileName, SDL_Renderer* renderer, int x = 0, int y = 0, int p = 0);
 	~Coin(void);
 
+	SDL_Point getPos() const;
 	void Draw(SDL_Rect dst);
 	void Clean();
 };

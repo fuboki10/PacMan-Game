@@ -14,6 +14,7 @@ public:
 	Monster(const char* fileName, SDL_Renderer* renderer, int x, int y, int spd);
 	~Monster(void);
 
+	SDL_Point getPos() const;
 	void Update(int map[20][25]);
 	void Clean();
 	void Draw(SDL_Rect dst);

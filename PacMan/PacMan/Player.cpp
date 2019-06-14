@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Game.h"
 
-Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* renderer, int x, int y, int spd) : renderer(renderer)
+Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* renderer, int x, int y, int spd, int lifes) : renderer(renderer)
 {
 	Direction = Stop; // stop
 	angle = 0.0;
@@ -12,7 +12,7 @@ Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* rende
 	ypos = y;
 	speed = 1;
 	score = 0;
-	lifes = 3;
+	this->lifes = lifes;
 
 	srcRect.x = srcRect.y = 0;
 	srcRect.h = 600;
@@ -23,22 +23,13 @@ Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* rende
 	destRect.h = destRect.w = 32;
 
 	Player_Tex1 = TextureManager::LoadTexture(fileName1, renderer);
-	if (Player_Tex1)
-	{
-		std::cout << "Player Texture 1 Created .. \n";
-	}
 	Player_Tex2 = TextureManager::LoadTexture(fileName2, renderer);
-	if (Player_Tex2)
-	{
-		std::cout << "Player Texture 2 Created .. \n";
-	}
 }
 
 void Player::Clean()
 {
 	SDL_DestroyTexture(Player_Tex1);
 	SDL_DestroyTexture(Player_Tex2);
-	std::cout << "Player Destroyed .. \n";
 }
 
 Player::~Player(void)
@@ -56,7 +47,17 @@ void Player::Draw(SDL_Rect dst)
 	TextureManager::DrawWithAngle(Player_Tex1, srcRect, destRect, renderer, angle, NULL, flip);
 }
 
-bool Player::Move(int row, int col, int map[20][25])
+SDL_Point Player::getPos() const
+{
+	SDL_Point P;
+	
+	P.x = xpos;
+	P.y = ypos;
+	
+	return P;
+}
+
+bool Player::Move(int row, int col, int map[20][25], Objects& object)
 {
 	if (map[row][col] == WALL || row >= 20 || row < 0 || col >= 25 || col < 0)
 	{
@@ -67,6 +68,7 @@ bool Player::Move(int row, int col, int map[20][25])
 	{
 		score += 1;
 		map[row][col] = PLAYER;
+		object = COIN;
 		return 1;
 	}
 	// monst
@@ -74,10 +76,16 @@ bool Player::Move(int row, int col, int map[20][25])
 	{
 		if (Game::canEat())
 		{
+			object = MONSTER;
 			std::cout << "Ate Monster ....\n";
-			return 1;
 		}
-		return 0;
+		else
+		{
+			object = PLAYER;
+			std::cout << "Game Over ....\n";
+		}
+		map[row][col] = PLAYER;
+		return 1;
 	}
 
 	map[row][col] = PLAYER;
@@ -86,7 +94,7 @@ bool Player::Move(int row, int col, int map[20][25])
 
 }
 
-void Player::Update(int map[20][25])
+void Player::Update(int map[20][25], Objects& object)
 {
 	int row = ypos;
 	int col = xpos;	
@@ -97,7 +105,7 @@ void Player::Update(int map[20][25])
 		new_row = row;
 		new_col = col + 1;
 			
-		if (this->Move(new_row, new_col, map)) 
+		if (this->Move(new_row, new_col, map, object)) 
 		{
 			xpos = new_col;
 			ypos = new_row;
@@ -117,7 +125,7 @@ void Player::Update(int map[20][25])
 		new_row = row;
 		new_col = col - 1;
 			
-		if (this->Move(new_row, new_col, map)) 
+		if (this->Move(new_row, new_col, map, object)) 
 		{
 			xpos = new_col;
 			ypos = new_row;
@@ -136,7 +144,7 @@ void Player::Update(int map[20][25])
 		new_row = row - 1;
 		new_col = col;
 
-		if (this->Move(new_row, new_col, map)) 
+		if (this->Move(new_row, new_col, map, object)) 
 		{
 			xpos = new_col;
 			ypos = new_row;
@@ -155,7 +163,7 @@ void Player::Update(int map[20][25])
 		new_row = row + 1;
 		new_col = col;
 
-		if (this->Move(new_row, new_col, map)) 
+		if (this->Move(new_row, new_col, map, object)) 
 		{
 			xpos = new_col;
 			ypos = new_row;
