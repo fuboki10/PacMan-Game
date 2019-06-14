@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <iostream>
 
-Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* renderer, int x, int y) : renderer(renderer)
+Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* renderer, int x, int y, int spd) : renderer(renderer)
 {
 	xpos = x;
 	ypos = y;
@@ -31,6 +31,15 @@ Player::~Player(void)
 	Clean();
 }
 
+void Player::Draw(SDL_Rect dst)
+{
+	destRect = dst;
+	
+	xpos = dst.x;
+	ypos = dst.y;
+
+	TextureManager::Draw(Player_Tex1, srcRect, destRect, renderer);
+}
 
 void Player::Update(bool x, bool y)
 {
@@ -50,5 +59,5 @@ void Player::Update(bool x, bool y)
 	
 void Player::render()
 {
-	SDL_RenderCopy(renderer, Player_Tex1, &srcRect, &destRect);
+	TextureManager::Draw(Player_Tex1, srcRect, destRect, renderer);
 }

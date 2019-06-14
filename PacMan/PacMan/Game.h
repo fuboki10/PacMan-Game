@@ -6,7 +6,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
-#include "Player.h"
 #include "Map.h"
 /* */
 
@@ -17,7 +16,6 @@ class Game
 {
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	Player* player;
 	Map* map;
 
 	bool GameIsRunning;

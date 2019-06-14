@@ -1,11 +1,31 @@
 #include "Game.h"
 
+int lvl1 [20][25];
 
 Game::Game(void) : FPS(60)
 {
 	frameDelay = 1000/FPS;
 	GameIsRunning = false;
-	player = nullptr;
+	bool p = 1;
+	for (int row = 2; row < 18; row++)
+	{
+		for (int col = 1; col < 24; col++)
+		{
+			lvl1[row][col] = (p) ? 1 : 0;
+
+			p ^= 1;
+
+		}
+	}
+
+	lvl1[5][6] = 2;
+	lvl1[15][3] = 3;
+	lvl1[3][7] = 3;
+	lvl1[20][2] = 3;
+	lvl1[1][1] = 3;
+
+
+
 	init("PacMan Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
 }
 void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullscreen)
@@ -34,7 +54,8 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 				 
 				// Create Objects 
 				map = new Map("Asserts/Background.png", renderer, w, h);
-				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png", renderer);
+
+				map->LoadMap(lvl1);
 
 			}
 		}
@@ -59,7 +80,6 @@ void Game::handleEvents()
 void Game::update()
 {
 	map->Update();
-	player->Update();
 }
 
 void Game::render()
@@ -68,7 +88,6 @@ void Game::render()
 
 	// add stuff to render		
 	map->render();
-	player->render();
 	
 
 	SDL_RenderPresent(renderer);
@@ -76,7 +95,6 @@ void Game::render()
 
 void Game::clean()
 {
-	player->Clean();
 	map->Clean();
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
