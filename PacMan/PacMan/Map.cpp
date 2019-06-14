@@ -214,9 +214,15 @@ void Map::Update()
 		if (object != NOTHING)
 		{
 			if (monster)
+			{
 				Delete(object, monster->getPos());
+				break;
+			}
 		}
 	}
+
+	if (coins.size() == 0)
+		game->Ultimate(1);
 
 	if (player)
 		std::cout << "Player Score : " << player->getScore() << std::endl;

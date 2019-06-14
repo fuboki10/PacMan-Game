@@ -49,6 +49,7 @@ public:
 	void clean();
 	bool quit() const;
 	static bool canEat();
+	void Ultimate(bool eat);
 	bool running() { return GameIsRunning; }
 };
 
