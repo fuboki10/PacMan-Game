@@ -1,17 +1,18 @@
 #include "Player.h"
 #include <iostream>
 
-Player::Player(SDL_Renderer* renderer, int x, int y) : renderer(renderer)
+Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* renderer, int x, int y) : renderer(renderer)
 {
 	xpos = x;
 	ypos = y;
+	speed = 1;
 
-	Player_Tex1 = TextureManager::LoadTexture("Asserts/Pac1.png", renderer);
+	Player_Tex1 = TextureManager::LoadTexture(fileName1, renderer);
 	if (Player_Tex1)
 	{
 		std::cout << "Player Texture 1 Created .. \n";
 	}
-	Player_Tex2 = TextureManager::LoadTexture("Asserts/Pac2.png", renderer);
+	Player_Tex2 = TextureManager::LoadTexture(fileName2, renderer);
 	if (Player_Tex2)
 	{
 		std::cout << "Player Texture 2 Created .. \n";
@@ -31,18 +32,18 @@ Player::~Player(void)
 }
 
 
-void Player::Update()
+void Player::Update(bool x, bool y)
 {
-	xpos++;
-	ypos++;
+	xpos+= x * speed;
+	ypos+= y * speed;
 
-	srcRect.h = 32;
-	srcRect.w = 32;
+	srcRect.h = 600;
+	srcRect.w = 600;
 	srcRect.x = 0;
 	srcRect.y = 0;
 
-	destRect.h = srcRect.h * 2;
-	destRect.w = srcRect.w * 2;
+	destRect.h = srcRect.h / 15;
+	destRect.w = srcRect.w / 15;
 	destRect.x = xpos;
 	destRect.y = ypos;
 }

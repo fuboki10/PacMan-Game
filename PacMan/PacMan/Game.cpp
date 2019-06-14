@@ -33,8 +33,8 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 				GameIsRunning = true;
 				 
 				// Create Objects 
-
-				player = new Player(renderer);
+				map = new Map("Asserts/Background.png", renderer, w, h);
+				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png", renderer);
 
 			}
 		}
@@ -58,6 +58,7 @@ void Game::handleEvents()
 
 void Game::update()
 {
+	map->Update();
 	player->Update();
 }
 
@@ -66,7 +67,9 @@ void Game::render()
 	SDL_RenderClear(renderer);
 
 	// add stuff to render		
+	map->render();
 	player->render();
+	
 
 	SDL_RenderPresent(renderer);
 }
@@ -74,6 +77,7 @@ void Game::render()
 void Game::clean()
 {
 	player->Clean();
+	map->Clean();
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();

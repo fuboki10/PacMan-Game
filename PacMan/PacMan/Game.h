@@ -7,6 +7,7 @@
 #include <SDL_image.h>
 #include <iostream>
 #include "Player.h"
+#include "Map.h"
 /* */
 
 using std::cout;
@@ -17,6 +18,7 @@ class Game
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	Player* player;
+	Map* map;
 
 	bool GameIsRunning;
 	const int FPS;

@@ -11,10 +11,10 @@ class Player
 	SDL_Renderer* renderer;
 
 public:
-	Player(SDL_Renderer* renderer, int x = 0, int y = 0);
+	Player(const char* fileName1, const char* fileName2, SDL_Renderer* renderer, int x = 0, int y = 0);
 	~Player(void);
 
-	void Update();
+	void Update(bool x = false, bool y = false);
 	void render();
 	void Clean();
 
