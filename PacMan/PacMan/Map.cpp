@@ -28,6 +28,10 @@ void Map::LoadMap(int arr[20][25])
 {
 
 	int type = 0;
+	
+	Coin* c;
+	Monster* m;
+	Wall* w;
 
 	for (int row = 0; row < 20; row++)
 	{
@@ -36,9 +40,6 @@ void Map::LoadMap(int arr[20][25])
 			map[row][col] = arr[row][col];
 
 			type = map[row][col];
-			
-			Coin* c;
-			Monster* m;
 
 			switch (type)
 			{
@@ -53,10 +54,10 @@ void Map::LoadMap(int arr[20][25])
 				m = new Monster("Asserts/Monster.png", renderer, row, col, 1);
 				monsters.push_back(m);
 				break;
-			/*case -1:
-				TextureManager::Draw(wall, src, dst, renderer);
+			case -1:
+				w = new Wall("Asserts/Wall.png", renderer, row, col);
+				walls.push_back(w);
 				break;
-			*/
 			default:
 				break;
 			}
@@ -78,6 +79,15 @@ void Map::DrawMap()
 	SDL_Rect dst;
 	dst.h = 32;
 	dst.w = 32;
+	auto Coin_it = coins.begin();
+	Coin* c;
+
+	auto Monster_it = monsters.begin();
+	Monster* m;
+
+	auto Wall_it = walls.begin();
+	Wall* w;
+
 	for (int row = 0; row < 20; row++)
 	{
 		for (int col = 0; col < 25; col++)
@@ -86,12 +96,6 @@ void Map::DrawMap()
 			dst.x = col * 32;
 
 			type = map[row][col];
-			
-			auto Coin_it = coins.begin();
-			Coin* c;
-
-			auto Monster_it = monsters.begin();
-			Monster* m;
 
 			switch (type)
 			{
@@ -108,9 +112,11 @@ void Map::DrawMap()
 				m->Draw(dst);
 				++Monster_it;
 				break;
-			/*case -1:
-				TextureManager::Draw(wall, src, dst, renderer);
-				break;*/
+			case -1:
+				w = *Wall_it;
+				w->Draw(dst);
+				++Wall_it;
+				break;
 			default:
 				break;
 			}
@@ -139,10 +145,14 @@ void Map::Clean()
 	player->Clean();
 	for (auto coin : coins)
 	{
-		coin ->Clean();
+		coin->Clean();
 	}
 	for (auto monster : monsters)
 	{
 		monster->Clean();
+	}
+	for (auto wall : walls)
+	{
+		wall->Clean();
 	}
 }

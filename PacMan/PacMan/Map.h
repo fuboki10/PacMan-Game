@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Coin.h"
 #include "Monster.h"
+#include "Wall.h"
 #include <list>
 
 class Map
@@ -17,6 +18,7 @@ class Map
 	Player *player;
 	std::list<Monster*> monsters;
 	std::list<Coin*> coins;
+	std::list<Wall*> walls;
 
 public:
 	Map(const char* MapName, SDL_Renderer *renderer, int w, int h);
