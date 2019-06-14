@@ -153,8 +153,9 @@ int Map::Search(const Objects& object, SDL_Point p)
 		{
 			p2 = monsters[i]->getPos();
 			if (p2.x == p.x && p2.y == p.y)
-			{
-				player->setScore(player->getScore() + 5);
+			{ 
+				if (player)
+					player->setScore(player->getScore() + 5);
 				return i;
 			}
 		}
@@ -167,7 +168,6 @@ void Map::Delete(const Objects& object, const SDL_Point& p)
 
 	Coin* c;
 	Monster* m;
-
 
 	switch (object)
 	{
