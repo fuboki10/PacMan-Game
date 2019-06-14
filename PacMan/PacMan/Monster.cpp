@@ -18,6 +18,9 @@ Monster::Monster(const char* fileName, SDL_Renderer* renderer, int x, int y, int
 
 	speed = spd;
 
+	last_move.x = xpos;
+	last_move.y = ypos;
+
 }
 
 
@@ -26,15 +29,20 @@ Monster::~Monster(void)
 	Clean();
 }
 
-bool Monster::Move(int row, int col, int map[20][25], Objects& object)
+int Monster::Move(int row, int col, int map[20][25], Objects& object)
 {
 	if (map[row][col] == WALL || row >= 20 || row < 0 || col >= 25 || col < 0)
 	{
 		return 0;
 	}
-	if (map[row][col] == COIN || map[row][col] == MONSTER)
+	if (map[row][col] == MONSTER)
 	{
 		return 0;
+	}
+	if (map[row][col] == COIN)
+	{
+		map[row][col] = MONSTER;
+		return 2;
 	}
 	if (map[row][col] == PLAYER)
 	{
@@ -83,14 +91,26 @@ void Monster::Update(int map[20][25], Objects& object)
 		{
 			new_row = row;
 			new_col = col + 1;
-			
-			if (this->Move(new_row, new_col, map, object)) 
+			int mv = this->Move(new_row, new_col, map, object);
+			if (mv) 
 			{
 				xpos = new_col;
 				ypos = new_row;
 
 				map[row][col] = NOTHING;
 				
+				if (last_move.x != -1 && last_move.y != -1)
+				{
+					map[last_move.y][last_move.x] = COIN;
+					last_move.x = last_move.y = -1;
+				}
+
+				if (mv == 2)
+				{
+					last_move.x = new_col;
+					last_move.y = new_row;
+				}
+
 				dst.x = xpos * 32;
 				dst.y = ypos * 32;
 				
@@ -103,54 +123,97 @@ void Monster::Update(int map[20][25], Objects& object)
 			new_row = row;
 			new_col = col - 1;
 			
-			if (this->Move(new_row, new_col, map, object)) 
+			int mv = this->Move(new_row, new_col, map, object);
+			if (mv) 
 			{
 				xpos = new_col;
 				ypos = new_row;
 
 				map[row][col] = NOTHING;
 				
+				if (last_move.x != -1 && last_move.y != -1)
+				{
+					map[last_move.y][last_move.x] = COIN;
+					last_move.x = last_move.y = -1;
+				}
+
+				if (mv == 2)
+				{
+					last_move.x = new_col;
+					last_move.y = new_row;
+				}
+
 				dst.x = xpos * 32;
 				dst.y = ypos * 32;
 				
 				break;
 			}
+
 		}
 		else if (Move == UP)
 		{
 			new_row = row - 1;
 			new_col = col;
 			
-			if (this->Move(new_row, new_col, map, object)) 
+			int mv = this->Move(new_row, new_col, map, object);
+			if (mv) 
 			{
 				xpos = new_col;
 				ypos = new_row;
 
 				map[row][col] = NOTHING;
 				
+				if (last_move.x != -1 && last_move.y != -1)
+				{
+					map[last_move.y][last_move.x] = COIN;
+					last_move.x = last_move.y = -1;
+				}
+
+				if (mv == 2)
+				{
+					last_move.x = new_col;
+					last_move.y = new_row;
+				}
+
 				dst.x = xpos * 32;
 				dst.y = ypos * 32;
 				
 				break;
 			}
+
 		}
 		else if (Move == Down)
 		{
 			new_row = row + 1;
 			new_col = col;
 			
-			if (this->Move(new_row, new_col, map, object)) 
+			int mv = this->Move(new_row, new_col, map, object);
+			if (mv) 
 			{
 				xpos = new_col;
 				ypos = new_row;
 
 				map[row][col] = NOTHING;
 				
+				if (last_move.x != -1 && last_move.y != -1)
+				{
+					map[last_move.y][last_move.x] = COIN;
+					last_move.x = last_move.y = -1;
+				}
+
+				if (mv == 2)
+				{
+					last_move.x = new_col;
+					last_move.y = new_row;
+				}
+
+				
 				dst.x = xpos * 32;
 				dst.y = ypos * 32;
 				
 				break;
 			}
+
 		}
 	}
 }

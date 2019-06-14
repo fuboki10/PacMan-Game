@@ -9,6 +9,7 @@ class Monster
 	int speed;
 	int xpos, ypos;
 	SDL_Rect src, dst;
+	SDL_Point last_move;
 
 public:
 	Monster(const char* fileName, SDL_Renderer* renderer, int x, int y, int spd);
@@ -18,6 +19,6 @@ public:
 	void Update(int map[20][25], Objects& object);
 	void Clean();
 	void Draw(SDL_Rect dst);
-	bool Move(int row, int col, int map[20][25], Objects& object);
+	int Move(int row, int col, int map[20][25], Objects& object);
 };
 
