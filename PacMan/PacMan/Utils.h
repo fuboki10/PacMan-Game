@@ -21,4 +21,11 @@ enum Objects
 	OBJECTS_NUM
 };
 
+enum MENU
+{
+	START,
+	END,
+	MENU_OPTIONS
+};
+
 #endif

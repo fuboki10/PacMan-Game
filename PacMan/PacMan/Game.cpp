@@ -25,11 +25,14 @@ int lvl1 [20][25] = {
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
 
-Game::Game(void) : FPS(60)
+Game::Game(int w, int h) : FPS(60)
 {
+	CloseTheGame = false;
+	Width = w;
+	Height = h;
 	frameDelay = 1000/FPS;
 	GameIsRunning = false;
-	init("PacMan Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
+	init("PacMan Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Width, Height, 0);
 }
 void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullscreen)
 {
@@ -54,11 +57,19 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 				cout << "renderer created .. \n";
 				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 				GameIsRunning = true;
-				 
-				// Create Objects 
-				map = new Map("Asserts/Background.png", renderer, w, h, this);
+				
+				// Create Menu 
+				menu = new Menu("Asserts/Background.png", "Asserts/GameOver.png", renderer, w, h, this); 
 
-				map->LoadMap(lvl1);
+				if (!menu)
+					throw SDL_Error;
+
+				map = new Map("Asserts/Background.png", renderer, Width, Height, this);
+				
+				if (!map)
+					throw SDL_Error;
+
+				StartGame(true);
 
 			}
 		}
@@ -71,38 +82,65 @@ void Game::handleEvents()
 	{
 		switch (event.type)
 		{
-		case SDL_KEYDOWN:
-            /* Check the SDLKey values and move change the coords */
-            switch( event.key.keysym.sym ){
-                case SDLK_LEFT:
-					map->setPlayerMovement(Left);
-                    break;
-                case SDLK_RIGHT:
-					map->setPlayerMovement(Right);
-                    break;
-                case SDLK_UP:
-					map->setPlayerMovement(UP);
-                    break;
-                case SDLK_DOWN:
-					map->setPlayerMovement(Down);
-                    break;
-                default:
-                    break;
-            }
-            break;
-		case SDL_QUIT :
-			GameIsRunning = false;
-			break;
-		default:
-			break;
+			case SDL_KEYDOWN:
+				/* Check the SDLKey values and move change the coords */
+				if (GameIsRunning)
+					switch( event.key.keysym.sym ){
+						case SDLK_LEFT:
+							map->setPlayerMovement(Left);
+							break;
+						case SDLK_RIGHT:
+							map->setPlayerMovement(Right);
+							break;
+						case SDLK_UP:
+							map->setPlayerMovement(UP);
+							break;
+						case SDLK_DOWN:
+							map->setPlayerMovement(Down);
+							break;
+						default:
+							break;
+					}
+				if (!GameIsRunning)
+					switch( event.key.keysym.sym ){
+						case SDLK_p:
+							menu->Play();
+							break;
+						case SDLK_q:
+							menu->Exit();
+							break;
+						default:
+							break;
+					}
+				break;
+			case SDL_QUIT :
+				GameIsRunning = false;
+				CloseTheGame = true;
+				break;
+			default:
+				break;
 		}
 	}
 }
+void Game::CloseGame(bool cg)
+{
+	CloseTheGame = cg;
 
+	if (CloseTheGame)
+		GameIsRunning = false;
+
+}
 void Game::update()
 {
-	map->Update();
-	SDL_Delay(500);
+	if (GameIsRunning)
+	{
+		map->Update();
+		SDL_Delay(500);
+	}
+	else
+	{
+		menu->Update();
+	}
 }
 
 void Game::render()
@@ -110,24 +148,48 @@ void Game::render()
 	SDL_RenderClear(renderer);
 
 	// add stuff to render		
-	map->render();
-	
+	if (GameIsRunning)
+		map->render();
+	else
+		menu->render();
 
 	SDL_RenderPresent(renderer);
+}
+void Game::StartGame(bool s)
+{
+	GameIsRunning = s;
+
+	if (GameIsRunning)
+	{
+		map->LoadMap(lvl1);
+	}
+	else
+	{
+		if (map)
+			map->Clean();
+	}
 }
 
 void Game::clean()
 {
-	map->Clean();
+	if (map)
+		delete map;
+
+	if (menu)
+		delete menu;
+
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 	cout << "Game Cleaned \n";
 }
-
+bool Game::quit() const
+{
+	return CloseTheGame;
+}
 bool Game::GameLoop()
 {
-	while (running())
+	while (running() || !quit())
 	{
 		this->frameStart = SDL_GetTicks();
 		
@@ -159,7 +221,7 @@ Game::~Game(void)
 
 void Game::GameOver(int Score)
 {
-	std::cout << "GameOver ... Your Score : " << Score << '\n';
 	GameIsRunning = false;
-	SDL_Delay(3000);
+	menu->GameOver(Score);
+	StartGame(false);
 }

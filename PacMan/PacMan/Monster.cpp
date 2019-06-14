@@ -1,4 +1,5 @@
 #include "Monster.h"
+#include "Game.h"
 #include <iostream>
 
 Monster::Monster(const char* fileName, SDL_Renderer* renderer, int x, int y, int spd) : renderer(renderer)
@@ -25,15 +26,28 @@ Monster::~Monster(void)
 	Clean();
 }
 
-bool Monster::Move(int row, int col, int map[20][25])
+bool Monster::Move(int row, int col, int map[20][25], Objects& object)
 {
 	if (map[row][col] == WALL || row >= 20 || row < 0 || col >= 25 || col < 0)
 	{
 		return 0;
 	}
-	if (map[row][col] == COIN || map[row][col] == MONSTER || map[row][col] == PLAYER)
+	if (map[row][col] == COIN || map[row][col] == MONSTER)
 	{
 		return 0;
+	}
+	if (map[row][col] == PLAYER)
+	{
+		if (Game::canEat())
+		{
+			object = MONSTER;
+		}
+		else
+		{
+			object = PLAYER;
+			map[row][col] = MONSTER;
+		}
+		return 1;
 	}
 	else if (map[row][col] == NOTHING)
 	{
@@ -55,7 +69,7 @@ SDL_Point Monster::getPos() const
 }
 
 
-void Monster::Update(int map[20][25])
+void Monster::Update(int map[20][25], Objects& object)
 {
 	int row = ypos;
 	int col = xpos;
@@ -69,7 +83,7 @@ void Monster::Update(int map[20][25])
 			new_row = row;
 			new_col = col + 1;
 			
-			if (this->Move(new_row, new_col, map)) 
+			if (this->Move(new_row, new_col, map, object)) 
 			{
 				xpos = new_col;
 				ypos = new_row;
@@ -88,7 +102,7 @@ void Monster::Update(int map[20][25])
 			new_row = row;
 			new_col = col - 1;
 			
-			if (this->Move(new_row, new_col, map)) 
+			if (this->Move(new_row, new_col, map, object)) 
 			{
 				xpos = new_col;
 				ypos = new_row;
@@ -106,7 +120,7 @@ void Monster::Update(int map[20][25])
 			new_row = row - 1;
 			new_col = col;
 			
-			if (this->Move(new_row, new_col, map)) 
+			if (this->Move(new_row, new_col, map, object)) 
 			{
 				xpos = new_col;
 				ypos = new_row;
@@ -124,7 +138,7 @@ void Monster::Update(int map[20][25])
 			new_row = row + 1;
 			new_col = col;
 			
-			if (this->Move(new_row, new_col, map)) 
+			if (this->Move(new_row, new_col, map, object)) 
 			{
 				xpos = new_col;
 				ypos = new_row;
@@ -142,7 +156,8 @@ void Monster::Update(int map[20][25])
 	
 void Monster::Clean()
 {
-	SDL_DestroyTexture(Monster_Text);
+	if (Monster_Text)
+		SDL_DestroyTexture(Monster_Text);
 }
 	
 void Monster::Draw(SDL_Rect dst)

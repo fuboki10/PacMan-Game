@@ -17,6 +17,7 @@ Map::Map(const char* MapName, SDL_Renderer *renderer, int w, int h, Game* game) 
 	dstRect.h = height;
 	dstRect.w = width;
 
+	player = nullptr;
 }
 
 void Map::setPlayerMovement(Moves move)
@@ -30,6 +31,7 @@ Map::~Map(void)
 }
 void Map::LoadMap(int arr[20][25])
 {
+	CleanObjects();
 
 	Objects type = NOTHING;
 	
@@ -206,8 +208,14 @@ void Map::Update()
 
 	for (auto monster : monsters)
 	{
+		object = NOTHING;
 		if (monster)
-			monster->Update(map);
+			monster->Update(map, object);
+		if (object != NOTHING)
+		{
+			if (monster)
+				Delete(object, monster->getPos());
+		}
 	}
 
 	if (player)
@@ -219,30 +227,42 @@ void Map::render()
 	DrawMap();
 }
 
+void Map::CleanObjects()
+{
+	if (player)
+		delete player;
+	player = NULL;
+
+	for (auto coin : coins)
+	{
+		if (coin)
+			delete coin;
+		coin = NULL;
+	}
+	coins.clear();
+
+	for (auto monster : monsters)
+	{
+		if (monster)
+			delete monster;
+		monster = NULL;
+	}
+	monsters.clear();
+
+	for (auto wall : walls)
+	{
+		if (wall)
+			delete wall;
+		wall = NULL;
+	}
+	walls.clear();
+}
+
 void Map::Clean()
 {
 	SDL_DestroyTexture(MapTexture);
 	
-	if (player)
-		player->Clean();
-	
-	for (auto coin : coins)
-	{
-		if (coin)
-			coin->Clean();
-	}
-	
-	for (auto monster : monsters)
-	{
-		if (monster)
-			monster->Clean();
-	}
-	
-	for (auto wall : walls)
-	{
-		if (wall)
-			wall->Clean();
-	}
+	CleanObjects();
 }
 
 void Map::GameOver()
@@ -250,8 +270,6 @@ void Map::GameOver()
 	if (player->getLifes() == 1)
 	{
 		int score = player->getScore();
-		delete player;
-		player = NULL;
 		game->GameOver(score);
 	}
 	else

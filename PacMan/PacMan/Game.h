@@ -7,38 +7,47 @@
 #include <SDL_image.h>
 #include <iostream>
 #include "Map.h"
+#include "Menu.h"
 /* */
 using std::cout;
 using std::endl;
+
 class Map;
+class Menu;
+
 class Game
 {
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	Map* map;
+	Menu* menu;
 	SDL_Event event;
 
-	bool GameIsRunning;
+	int Width, Height;
 	const int FPS;
 	int frameDelay;
 	Uint32 frameStart;
 	int frameTime;
 
+	bool GameIsRunning;  
+	bool CloseTheGame;    // Close the Entire Game Menu
 	static bool CanEat;
 
 public:
 	
-	Game(void);
+	Game(int w = 800, int h = 600);
 	~Game(void);
+	void StartGame(bool s);
 	bool GameLoop();
 	void GameOver(int Score);
+	void CloseGame(bool cg);
 	void init(const char* title, int xpos, int ypos, int w, int h, bool fullscreen);
 	
 	void handleEvents();
 	void update();
 	void render();
 	void clean();
-
+	bool quit() const;
 	static bool canEat();
 	bool running() { return GameIsRunning; }
 };

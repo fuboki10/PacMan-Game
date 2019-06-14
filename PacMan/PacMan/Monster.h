@@ -15,9 +15,9 @@ public:
 	~Monster(void);
 
 	SDL_Point getPos() const;
-	void Update(int map[20][25]);
+	void Update(int map[20][25], Objects& object);
 	void Clean();
 	void Draw(SDL_Rect dst);
-	bool Move(int row, int col, int map[20][25]);
+	bool Move(int row, int col, int map[20][25], Objects& object);
 };
 

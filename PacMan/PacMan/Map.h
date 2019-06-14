@@ -26,6 +26,7 @@ class Map
 
 	int Search(const Objects& object, SDL_Point p);
 	void GameOver();
+	void CleanObjects();
 
 public:
 	Map(const char* MapName, SDL_Renderer *renderer, int w, int h, Game* game);
