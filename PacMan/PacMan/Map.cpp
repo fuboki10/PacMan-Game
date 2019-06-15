@@ -258,6 +258,7 @@ void Map::Update()
 			return;
 	}
 
+	// SP for Monsters AI
 	BFS();
 
 	for (auto monster : monsters)

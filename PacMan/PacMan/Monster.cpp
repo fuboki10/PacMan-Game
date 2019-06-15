@@ -18,8 +18,8 @@ Monster::Monster(const char* fileName, SDL_Renderer* renderer, int x, int y, int
 
 	speed = spd;
 
-	last_move.x = xpos;
-	last_move.y = ypos;
+	last_move.x = -1;
+	last_move.y = -1;
 
 }
 
@@ -115,7 +115,7 @@ void Monster::Update(int map[20][25], Objects& object, int SP[20][25])
 			map[last_move.y][last_move.x] = COIN;
 			last_move.x = last_move.y = -1;
 		}
-
+		
 		if (mv == 2)
 		{
 			last_move.x = new_col;
