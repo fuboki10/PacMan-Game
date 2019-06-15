@@ -106,6 +106,16 @@ void Game::handleEvents()
 						case SDLK_q:
 							menu->Exit();
 							break;
+						case SDLK_UP:
+							menu->MoveSquare(0);
+							break;
+						case SDLK_DOWN:
+							menu->MoveSquare(1);
+							break;
+						case SDLK_KP_ENTER:
+						case SDLK_RETURN:
+							menu->Enter();
+							break;
 						default:
 							break;
 					}
