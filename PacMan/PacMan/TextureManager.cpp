@@ -28,3 +28,4 @@ void TextureManager::DrawWithAngle(SDL_Texture* text, SDL_Rect src, SDL_Rect dst
 {
 	SDL_RenderCopyEx(renderer, text, &src, &dst, angle, center, flip);
 }
+

@@ -202,7 +202,10 @@ void Game::clean()
 		delete menu;
 
 	SDL_DestroyWindow(window);
+	window = nullptr;
 	SDL_DestroyRenderer(renderer);
+	renderer = nullptr;
+	IMG_Quit();
 	SDL_Quit();
 	cout << "Game Cleaned \n";
 }
