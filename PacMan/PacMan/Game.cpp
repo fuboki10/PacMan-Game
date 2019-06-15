@@ -151,10 +151,10 @@ void Game::update()
 		
 		if (!CanEat)
 		{
-			SDL_Delay(125/2);
+			SDL_Delay(60);
 		}
 
-		SDL_Delay(125/2);
+		SDL_Delay(60);
 	}
 	else
 	{
