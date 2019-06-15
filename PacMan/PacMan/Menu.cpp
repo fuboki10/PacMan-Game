@@ -9,8 +9,8 @@ Menu::Menu(const char* startFileName, const char* gameOverFileName, SDL_Renderer
 	mode = START;
 
 	src.x = src.y = 0;
-	src.w = 1920;
-	src.h = 1080;
+	src.w = 800;
+	src.h = 600;
 
 	dst.x = dst.y = 0;
 	dst.w = w;
@@ -56,6 +56,8 @@ void Menu::render()
 {
 	if (Mode() == END)
 		TextureManager::Draw(gameOverMenu, src, dst, renderer);
+	if (Mode() == START)
+		TextureManager::Draw(startMenu, src, dst, renderer);
 }
 
 void Menu::Clean()

@@ -32,6 +32,8 @@ Game::Game(int w, int h) : FPS(60)
 	Height = h;
 	frameDelay = 1000/FPS;
 	GameIsRunning = false;
+	map = nullptr;
+	menu = nullptr;
 	init("PacMan Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Width, Height, 0);
 }
 void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullscreen)
@@ -59,12 +61,12 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 				GameIsRunning = true;
 				
 				// Create Menu 
-				menu = new Menu("Asserts/Background.png", "Asserts/GameOver.png", renderer, w, h, this); 
+				menu = new Menu("Asserts/StartMenu.png", "Asserts/GameOver.png", renderer, w, h, this); 
 
 				if (!menu)
 					throw SDL_Error;
 
-				StartGame(true);
+				StartGame(false);
 
 			}
 		}
