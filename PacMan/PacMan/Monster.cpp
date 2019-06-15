@@ -77,144 +77,54 @@ SDL_Point Monster::getPos() const
 }
 
 
-void Monster::Update(int map[20][25], Objects& object)
+void Monster::Update(int map[20][25], Objects& object, int SP[20][25])
 {
 	int col = xpos;
 	int row = ypos;
 	int new_row, new_col;
 
-	for (int i = Right; i < MOVES_NUM; i++)
+	SDL_Point min_p;
+	int min = INT_MAX;
+
+	for (int i = Right; i < Stop; i++)
 	{
-		int Move = rand() % Stop;
+		new_col = col + dx[i];
+		new_row = row + dy[i];
 
-		if (Move == Right)
+		if (min > SP[new_row][new_col] && SP[new_row][new_col] != -1)
 		{
-			new_row = row;
-			new_col = col + 1;
-			int mv = this->Move(new_row, new_col, map, object);
-			if (mv) 
-			{
-				xpos = new_col;
-				ypos = new_row;
-
-				map[row][col] = NOTHING;
-				
-				if (last_move.x != -1 && last_move.y != -1)
-				{
-					map[last_move.y][last_move.x] = COIN;
-					last_move.x = last_move.y = -1;
-				}
-
-				if (mv == 2)
-				{
-					last_move.x = new_col;
-					last_move.y = new_row;
-				}
-
-				dst.x = xpos * 32;
-				dst.y = ypos * 32;
-				
-				break;
-			}
-
+			min = SP[new_row][new_col];
+			min_p.x = new_col;
+			min_p.y = new_row;
 		}
-		else if (Move == Left)
+	}
+
+	new_row = min_p.y;
+	new_col = min_p.x;
+
+	int mv = this->Move(new_row, new_col, map, object);
+	if (mv) 
+	{
+		xpos = new_col;
+		ypos = new_row;
+
+		map[row][col] = NOTHING;
+				
+		if (last_move.x != -1 && last_move.y != -1)
 		{
-			new_row = row;
-			new_col = col - 1;
-			
-			int mv = this->Move(new_row, new_col, map, object);
-			if (mv) 
-			{
-				xpos = new_col;
-				ypos = new_row;
-
-				map[row][col] = NOTHING;
-				
-				if (last_move.x != -1 && last_move.y != -1)
-				{
-					map[last_move.y][last_move.x] = COIN;
-					last_move.x = last_move.y = -1;
-				}
-
-				if (mv == 2)
-				{
-					last_move.x = new_col;
-					last_move.y = new_row;
-				}
-
-				dst.x = xpos * 32;
-				dst.y = ypos * 32;
-				
-				break;
-			}
-
+			map[last_move.y][last_move.x] = COIN;
+			last_move.x = last_move.y = -1;
 		}
-		else if (Move == UP)
+
+		if (mv == 2)
 		{
-			new_row = row - 1;
-			new_col = col;
-			
-			int mv = this->Move(new_row, new_col, map, object);
-			if (mv) 
-			{
-				xpos = new_col;
-				ypos = new_row;
-
-				map[row][col] = NOTHING;
-				
-				if (last_move.x != -1 && last_move.y != -1)
-				{
-					map[last_move.y][last_move.x] = COIN;
-					last_move.x = last_move.y = -1;
-				}
-
-				if (mv == 2)
-				{
-					last_move.x = new_col;
-					last_move.y = new_row;
-				}
-
-				dst.x = xpos * 32;
-				dst.y = ypos * 32;
-				
-				break;
-			}
-
+			last_move.x = new_col;
+			last_move.y = new_row;
 		}
-		else if (Move == Down)
-		{
-			new_row = row + 1;
-			new_col = col;
-			
-			int mv = this->Move(new_row, new_col, map, object);
-			if (mv) 
-			{
-				xpos = new_col;
-				ypos = new_row;
 
-				map[row][col] = NOTHING;
+		dst.x = xpos * 32;
+		dst.y = ypos * 32;
 				
-				if (last_move.x != -1 && last_move.y != -1)
-				{
-					map[last_move.y][last_move.x] = COIN;
-					last_move.x = last_move.y = -1;
-				}
-
-				if (mv == 2)
-				{
-					last_move.x = new_col;
-					last_move.y = new_row;
-				}
-
-				
-				dst.x = xpos * 32;
-				dst.y = ypos * 32;
-				
-				break;
-			}
-
-		}
 	}
 }
 	

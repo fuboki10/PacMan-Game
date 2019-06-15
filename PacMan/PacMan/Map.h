@@ -4,7 +4,8 @@
 #include "Coin.h"
 #include "Monster.h"
 #include "Wall.h"
-#include<vector>
+#include <vector>
+#include <queue>
 #include "Game.h"
 
 class Game;
@@ -18,6 +19,7 @@ class Map
 
 	int width, height;
 	int map[20][25];
+	int SP[20][25];
 
 	Player *player;
 	std::vector<Monster*> monsters;
@@ -27,7 +29,8 @@ class Map
 	int Search(const Objects& object, SDL_Point p);
 	void GameOver();
 	void CleanObjects();
-
+	void BFS();
+	bool valid(const SDL_Point& p) const;
 public:
 	Map(const char* MapName, SDL_Renderer *renderer, int w, int h, Game* game);
 	~Map(void);

@@ -193,8 +193,58 @@ void Map::Delete(const Objects& object, const SDL_Point& p)
 	}
 }
 
+bool Map::valid(const SDL_Point& p) const
+{
+	if (p.y >= 20 || p.y < 0 || p.x >= 25 || p.x < 0)
+	{
+		return 0;
+	}
+
+	if (SP[p.y][p.x] != -1)
+	{
+		return 0;
+	}
+
+	if (map[p.y][p.x] == WALL)
+	{
+		return 0;
+	}
+
+	return 1;
+}
+
+void Map::BFS()
+{
+	std::queue<SDL_Point> q;
+	SDL_Point p = player->getPos();
+
+	q.push(p);
+	SP[p.y][p.x] = 0;
+
+	while (!q.empty())
+	{
+		SDL_Point cur = q.front();
+		q.pop();
+
+		for (int i = 0; i < 4; i++)
+		{
+			SDL_Point u;
+			u.x = cur.x + dx[i];
+			u.y = cur.y + dy[i];
+			
+			if (valid(u))
+			{
+				SP[u.y][u.x] = SP[cur.y][cur.x] + 1;
+				q.push(u);
+			}
+		}
+	}
+}
+
 void Map::Update()
 {
+	memset(SP, -1, sizeof SP);
+
 	Objects object = NOTHING;
 
 	if (player)
@@ -208,11 +258,13 @@ void Map::Update()
 			return;
 	}
 
+	BFS();
+
 	for (auto monster : monsters)
 	{
 		object = NOTHING;
 		if (monster)
-			monster->Update(map, object);
+			monster->Update(map, object, SP);
 		if (object != NOTHING)
 		{
 			if (monster)
