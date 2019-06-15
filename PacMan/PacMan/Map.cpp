@@ -278,6 +278,8 @@ void Map::Update()
 
 	if (coins.size() == 0)
 		game->Ultimate(1);
+	if (monsters.size() == 0)
+		GameOver();
 }
 
 void Map::render()
