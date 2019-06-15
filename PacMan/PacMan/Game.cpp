@@ -84,15 +84,19 @@ void Game::handleEvents()
 				if (GameIsRunning)
 					switch( event.key.keysym.sym ){
 						case SDLK_LEFT:
+						case SDLK_a:
 							map->setPlayerMovement(Left);
 							break;
 						case SDLK_RIGHT:
+						case SDLK_d:
 							map->setPlayerMovement(Right);
 							break;
 						case SDLK_UP:
+						case SDLK_w:
 							map->setPlayerMovement(UP);
 							break;
 						case SDLK_DOWN:
+						case SDLK_s:
 							map->setPlayerMovement(Down);
 							break;
 						default:
@@ -107,9 +111,11 @@ void Game::handleEvents()
 							menu->Exit();
 							break;
 						case SDLK_UP:
+						case SDLK_w:
 							menu->MoveSquare(0);
 							break;
 						case SDLK_DOWN:
+						case SDLK_s:
 							menu->MoveSquare(1);
 							break;
 						case SDLK_KP_ENTER:
