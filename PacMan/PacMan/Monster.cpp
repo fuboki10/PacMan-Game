@@ -2,15 +2,19 @@
 #include "Game.h"
 #include <iostream>
 
-Monster::Monster(const char* fileName, SDL_Renderer* renderer, int x, int y, int spd) : renderer(renderer)
+Monster::Monster(const char* monsterFileName, const char* spiritFileName, SDL_Renderer* renderer, int x, int y, int spd) : renderer(renderer)
 {
-	Monster_Text = TextureManager::LoadTexture(fileName, renderer);
-	
+	Monster_Text = TextureManager::LoadTexture(monsterFileName, renderer);
+	Spirit_Text = TextureManager::LoadTexture(spiritFileName, renderer);
+
 	xpos = x;
 	ypos = y;
 
-	src.x = src.y = 0;
-	src.h = src.w = 256;
+	srcMonster.x = srcMonster.y = 0;
+	srcMonster.h = srcMonster.w = 256;
+
+	srcSpirit.x = srcSpirit.y = 0;
+	srcSpirit.h = srcSpirit.w = 108;
 
 	dst.x = xpos * 32;
 	dst.y = ypos * 32;
@@ -79,52 +83,74 @@ SDL_Point Monster::getPos() const
 
 void Monster::Update(int map[20][25], Objects& object, int SP[20][25])
 {
+	speed ^= 1;
+
 	int col = xpos;
 	int row = ypos;
 	int new_row, new_col;
 
 	SDL_Point min_p;
+	
 	int min = INT_MAX;
+	int max = INT_MIN;
 
-	for (int i = Right; i < Stop; i++)
-	{
-		new_col = col + dx[i];
-		new_row = row + dy[i];
-
-		if (min > SP[new_row][new_col] && SP[new_row][new_col] != -1)
+	if (!Game::canEat())
+		for (int i = Right; i < Stop; i++)
 		{
-			min = SP[new_row][new_col];
-			min_p.x = new_col;
-			min_p.y = new_row;
+			new_col = col + dx[i];
+			new_row = row + dy[i];
+
+			if (min > SP[new_row][new_col] && SP[new_row][new_col] != -1)
+			{
+				min = SP[new_row][new_col];
+				min_p.x = new_col;
+				min_p.y = new_row;
+			}
 		}
-	}
+		
+	if (Game::canEat())
+		for (int i = Right; i < Stop; i++)
+		{
+			new_col = col + dx[i];
+			new_row = row + dy[i];
+
+			if (max < SP[new_row][new_col] && SP[new_row][new_col] != -1)
+			{
+				max = SP[new_row][new_col];
+				min_p.x = new_col;
+				min_p.y = new_row;
+			}
+		}
 
 	new_row = min_p.y;
 	new_col = min_p.x;
 
-	int mv = this->Move(new_row, new_col, map, object);
-	if (mv) 
+	if (speed)
 	{
-		xpos = new_col;
-		ypos = new_row;
-
-		map[row][col] = NOTHING;
-				
-		if (last_move.x != -1 && last_move.y != -1)
+		int mv = this->Move(new_row, new_col, map, object);
+		if (mv) 
 		{
-			map[last_move.y][last_move.x] = COIN;
-			last_move.x = last_move.y = -1;
-		}
+			xpos = new_col;
+			ypos = new_row;
+
+			map[row][col] = NOTHING;
+				
+			if (last_move.x != -1 && last_move.y != -1)
+			{
+				map[last_move.y][last_move.x] = COIN;
+				last_move.x = last_move.y = -1;
+			}
 		
-		if (mv == 2)
-		{
-			last_move.x = new_col;
-			last_move.y = new_row;
-		}
+			if (mv == 2)
+			{
+				last_move.x = new_col;
+				last_move.y = new_row;
+			}
 
-		dst.x = xpos * 32;
-		dst.y = ypos * 32;
+			dst.x = xpos * 32;
+			dst.y = ypos * 32;
 				
+		}
 	}
 }
 	
@@ -132,6 +158,8 @@ void Monster::Clean()
 {
 	if (Monster_Text)
 		SDL_DestroyTexture(Monster_Text);
+	if (Spirit_Text)
+		SDL_DestroyTexture(Spirit_Text);
 }
 	
 void Monster::Draw(SDL_Rect dst)
@@ -141,5 +169,8 @@ void Monster::Draw(SDL_Rect dst)
 	xpos = dst.x / 32;
 	ypos = dst.y / 32;
 
-	TextureManager::Draw(Monster_Text, src, this->dst, renderer);
+	if (!Game::canEat())
+		TextureManager::Draw(Monster_Text, srcMonster, this->dst, renderer);
+	else
+		TextureManager::Draw(Spirit_Text, srcSpirit, dst, renderer);
 }

@@ -57,7 +57,7 @@ void Map::LoadMap(int arr[20][25])
 				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png", renderer, col , row, 1, 1); 
 				break;
 			case MONSTER:
-				m = new Monster("Asserts/Monster.png", renderer, col, row, 1);
+				m = new Monster("Asserts/Monster.png", "Asserts/Spirit.png", renderer, col, row, 1);
 				monsters.push_back(m);
 				break;
 			case WALL:

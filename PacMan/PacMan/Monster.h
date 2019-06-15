@@ -5,14 +5,15 @@
 class Monster
 {
 	SDL_Texture* Monster_Text;
+	SDL_Texture* Spirit_Text;
 	SDL_Renderer* renderer;
 	int speed;
 	int xpos, ypos;
-	SDL_Rect src, dst;
+	SDL_Rect srcMonster, srcSpirit, dst;
 	SDL_Point last_move;
 
 public:
-	Monster(const char* fileName, SDL_Renderer* renderer, int x, int y, int spd);
+	Monster(const char* monsterFileName, const char* spiritFileName, SDL_Renderer* renderer, int x, int y, int spd);
 	~Monster(void);
 
 	SDL_Point getPos() const;
