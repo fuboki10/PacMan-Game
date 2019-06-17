@@ -69,10 +69,6 @@ void Map::LoadMap(int arr[20][25])
 			}
 		}
 	}
-	std::cout << "Coins = " << coins.size() << std::endl;
-	std::cout << "monsters = " << monsters.size() << std::endl; 
-	std::cout << "walls = " << walls.size() << std::endl; 
-
 }
 
 /*
