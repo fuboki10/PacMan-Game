@@ -69,6 +69,10 @@ void Map::LoadMap(int arr[20][25])
 			}
 		}
 	}
+	std::cout << "Coins = " << coins.size() << std::endl;
+	std::cout << "monsters = " << monsters.size() << std::endl; 
+	std::cout << "walls = " << walls.size() << std::endl; 
+
 }
 
 /*
@@ -132,6 +136,11 @@ void Map::DrawMap()
 			
 		}
 	}
+
+	// make monster spirits
+	if (!cIdx)
+		game->Ultimate(1);
+
 }
 
 int Map::Search(const Objects& object, SDL_Point p)
@@ -275,9 +284,7 @@ void Map::Update()
 			}
 		}
 	}
-
-	if (coins.size() == 0)
-		game->Ultimate(1);
+	
 	if (monsters.size() == 0)
 		GameOver();
 }
