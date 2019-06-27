@@ -184,7 +184,7 @@ void Game::StartGame(bool s)
 
 	if (GameIsRunning)
 	{
-		map = new Map("Asserts/Background.png", renderer, Width, Height, this);
+		map = new Map("Asserts/Background.png", "Asserts/Heart.png", renderer, Width, Height, this);
 				
 		if (!map)
 			throw SDL_Error;

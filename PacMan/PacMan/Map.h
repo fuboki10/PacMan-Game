@@ -12,9 +12,9 @@ class Game;
 
 class Map
 {
-	SDL_Texture* MapTexture;
+	SDL_Texture* MapTexture, *HeartText;
 	SDL_Renderer *renderer;
-	SDL_Rect srcRect, dstRect;
+	SDL_Rect srcRect, dstRect, srcHeartRect;
 	Game* game;
 
 	int width, height;
@@ -39,7 +39,7 @@ class Map
 
 public:
 	
-	Map(const char* MapName, SDL_Renderer *renderer, int w, int h, Game* game);
+	Map(const char* MapName, const char* HeartName, SDL_Renderer *renderer, int w, int h, Game* game);
 	~Map(void);
 	void LoadMap(int arr[20][25]);
 	void DrawMap();

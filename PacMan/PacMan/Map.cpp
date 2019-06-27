@@ -1,9 +1,10 @@
 #include "Map.h"
 #include <iostream>
 
-Map::Map(const char* MapName, SDL_Renderer *renderer, int w, int h, Game* game) : renderer(renderer), game(game)
+Map::Map(const char* MapName, const char* HeartName, SDL_Renderer *renderer, int w, int h, Game* game) : renderer(renderer), game(game)
 {
 	MapTexture = TextureManager::LoadTexture(MapName, renderer);
+	HeartText = TextureManager::LoadTexture(HeartName, renderer);
 	width = w;
 	height = h;
 
@@ -16,6 +17,9 @@ Map::Map(const char* MapName, SDL_Renderer *renderer, int w, int h, Game* game) 
 	dstRect.y = 0;
 	dstRect.h = height;
 	dstRect.w = width;
+
+	srcHeartRect.x = srcHeartRect.y = 0;
+	srcHeartRect.w = srcHeartRect.h = 32;
 
 	player = nullptr;
 }
@@ -54,7 +58,7 @@ void Map::LoadMap(int arr[20][25])
 				coins.push_back(c);
 				break;
 			case PLAYER:
-				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png", renderer, col , row, 1, 1); 
+				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png",renderer, col , row, 1, 3); 
 				break;
 			case MONSTER:
 				m = new Monster("Asserts/Monster.png", "Asserts/Spirit.png", renderer, col, row, 1);
@@ -69,6 +73,7 @@ void Map::LoadMap(int arr[20][25])
 			}
 		}
 	}
+
 }
 
 /*
@@ -131,6 +136,14 @@ void Map::DrawMap()
 			}
 			
 		}
+	}
+	dst.y = 1 * 32;
+	dst.x = 1 * 32;
+	
+	for (int i = 0; i < player->getLifes(); i++)
+	{
+		dst.x = (i + 1) * 32;
+		TextureManager::Draw(HeartText, srcHeartRect, dst, renderer);
 	}
 
 	// make monster spirits
