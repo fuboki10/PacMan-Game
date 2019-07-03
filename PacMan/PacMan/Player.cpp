@@ -2,11 +2,13 @@
 #include <iostream>
 #include "Game.h"
 
-Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* renderer, int x, int y, int spd, int lifes) : renderer(renderer)
+Player::Player(const char* fileName1, const char* fileName2, const char* fileName3, SDL_Renderer* renderer, int x, int y, int spd, int lifes) : renderer(renderer)
 {
 	Direction = Stop; // stop
 	angle = 0.0;
 	flip = SDL_FLIP_NONE;
+	move = 0;
+	Ult = false;
 
 	xpos = x;
 	ypos = y;
@@ -15,8 +17,8 @@ Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* rende
 	this->lifes = lifes;
 
 	srcRect.x = srcRect.y = 0;
-	srcRect.h = 600;
-	srcRect.w = 541;
+	srcRect.h = 32;
+	srcRect.w = 32;
 
 	destRect.x = xpos * 32;
 	destRect.y = ypos * 32;
@@ -24,12 +26,14 @@ Player::Player(const char* fileName1, const char* fileName2, SDL_Renderer* rende
 
 	Player_Tex1 = TextureManager::LoadTexture(fileName1, renderer);
 	Player_Tex2 = TextureManager::LoadTexture(fileName2, renderer);
+	Player_Tex3 = TextureManager::LoadTexture(fileName3, renderer);
 }
 
 void Player::Clean()
 {
 	SDL_DestroyTexture(Player_Tex1);
 	SDL_DestroyTexture(Player_Tex2);
+	SDL_DestroyTexture(Player_Tex3);
 }
 
 Player::~Player(void)
@@ -39,12 +43,20 @@ Player::~Player(void)
 
 void Player::Draw(SDL_Rect dst)
 {
+	move++;
+	move %= 4;
+
 	destRect = dst;
 	
 	xpos = dst.x / 32;
 	ypos = dst.y / 32;
-
-	TextureManager::DrawWithAngle(Player_Tex1, srcRect, destRect, renderer, angle, NULL, flip);
+	
+	if (Ult)
+		TextureManager::DrawWithAngle(Player_Tex3, srcRect, destRect, renderer, angle, NULL, flip);
+	else if (move <= 1)
+		TextureManager::DrawWithAngle(Player_Tex1, srcRect, destRect, renderer, angle, NULL, flip);
+	else 
+		TextureManager::DrawWithAngle(Player_Tex2, srcRect, destRect, renderer, angle, NULL, flip);
 }
 
 SDL_Point Player::getPos() const

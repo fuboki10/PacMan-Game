@@ -58,7 +58,7 @@ void Map::LoadMap(int arr[20][25])
 				coins.push_back(c);
 				break;
 			case PLAYER:
-				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png",renderer, col , row, 1, 3); 
+				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png", "Asserts/PacUlt.png", renderer, col , row, 1, 3); 
 				break;
 			case MONSTER:
 				m = new Monster("Asserts/Monster.png", "Asserts/Spirit.png", renderer, col, row, 1);
@@ -148,7 +148,7 @@ void Map::DrawMap()
 
 	// make monster spirits
 	if (!cIdx)
-		game->Ultimate(1);
+		game->Ultimate(1), player->Ultimate(1);
 
 }
 
