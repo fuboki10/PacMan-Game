@@ -29,7 +29,7 @@ Map::Map(const char* MapName, const char* HeartName, SDL_Renderer *renderer, int
 
 void Map::DrawScore()
 {
-	SDL_Rect ScoreDst = {0, 0, 200, 200};
+	SDL_Rect ScoreDst = {30, 10, 200, 200};
 	int sc = player->getScore();
 	std::string Score = "Score : ";
 	Score += std::to_string(sc);
