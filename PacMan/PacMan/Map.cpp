@@ -1,5 +1,6 @@
 #include "Map.h"
 #include <iostream>
+#include <string>
 
 Map::Map(const char* MapName, const char* HeartName, SDL_Renderer *renderer, int w, int h, Game* game) : renderer(renderer), game(game)
 {
@@ -22,6 +23,17 @@ Map::Map(const char* MapName, const char* HeartName, SDL_Renderer *renderer, int
 	srcHeartRect.w = srcHeartRect.h = 32;
 
 	player = nullptr;
+
+	fontPath = "Asserts/04B_30__.TTF";
+}
+
+void Map::DrawScore()
+{
+	SDL_Rect ScoreDst = {0, 0, 200, 200};
+	int sc = player->getScore();
+	std::string Score = "Score : ";
+	Score += std::to_string(sc);
+	TextureManager::DrawText(fontPath, Score.c_str(), ScoreDst, renderer, 24);
 }
 
 void Map::setPlayerMovement(Moves move)
@@ -58,7 +70,7 @@ void Map::LoadMap(int arr[20][25])
 				coins.push_back(c);
 				break;
 			case PLAYER:
-				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png", "Asserts/PacUlt.png", renderer, col , row, 1, 3); 
+				player = new Player("Asserts/Pac1.png", "Asserts/Pac2.png", "Asserts/PacUlt.png", renderer, col , row, 1, 1); 
 				break;
 			case MONSTER:
 				m = new Monster("Asserts/Monster.png", "Asserts/Spirit.png", renderer, col, row, 1);
@@ -88,6 +100,7 @@ void Map::DrawMap()
 {
 
 	//TextureManager::Draw(MapTexture, srcRect, dstRect, renderer);
+
 
 	Objects type = NOTHING;
 	SDL_Rect dst;
@@ -149,6 +162,9 @@ void Map::DrawMap()
 	// make monster spirits
 	if (!cIdx)
 		game->Ultimate(1), player->Ultimate(1);
+
+	DrawScore();
+
 
 }
 

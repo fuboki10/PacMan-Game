@@ -1,6 +1,5 @@
 #include "TextureManager.h"
 #include <iostream>
-#include "SDL_ttf.h"
 
 SDL_Texture* TextureManager::LoadTexture(const char* fileName, SDL_Renderer* ren)
 {
@@ -30,13 +29,12 @@ void TextureManager::DrawWithAngle(SDL_Texture* text, SDL_Rect src, SDL_Rect dst
 	SDL_RenderCopyEx(renderer, text, &src, &dst, angle, center, flip);
 }
 
-void TextureManager::DrawText (const char* fontPath, const char* Text, SDL_Rect dst, SDL_Renderer* renderer)
+void TextureManager::DrawText(const char* fontPath, const char* Text, SDL_Rect dst, SDL_Renderer* renderer, int fontSize)
 {
-	int fontsize = 24;
 	int t_width = 0; // width of the loaded font-texture
 	int t_height = 0; // height of the loaded font-texture
-	SDL_Color text_color = {0,0,0};
-	TTF_Font* font = TTF_OpenFont(fontPath, fontsize);
+	SDL_Color text_color = {255,255,255};
+	TTF_Font* font = TTF_OpenFont(fontPath, fontSize);
 	SDL_Texture* ftexture = NULL; // our font-texture
 
 	// check to see that the font was loaded correctly
@@ -71,5 +69,6 @@ void TextureManager::DrawText (const char* fontPath, const char* Text, SDL_Rect 
 	}
 	dst.w = t_width;
 	dst.h = t_height;
-	SDL_RenderCopy(renderer, ftexture, NULL, &dst);
+
+	SDL_RenderCopy(renderer, ftexture, 0, &dst);
 }

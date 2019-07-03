@@ -70,6 +70,10 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 
 			}
 		}
+		if (TTF_Init() != 0){	
+			throw SDL_Error;
+			SDL_Quit();
+		}
 	}
 }
 

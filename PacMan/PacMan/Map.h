@@ -19,6 +19,7 @@ class Map
 
 	int width, height;
 	int map[20][25];
+	const char* fontPath;
 
 	Player *player;
 	std::vector<Monster*> monsters;
@@ -26,6 +27,7 @@ class Map
 	std::vector<Wall*> walls;
 
 	int Search(const Objects& object, SDL_Point p);
+	void DrawScore();
 	void GameOver();
 	void CleanObjects();
 

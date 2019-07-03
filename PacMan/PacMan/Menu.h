@@ -1,6 +1,7 @@
 #pragma once
 #include "TextureManager.h"
 #include "Game.h"
+#include <string>
 
 enum StartOptions
 {
@@ -19,7 +20,9 @@ class Menu
 	SDL_Renderer* renderer;
 	SDL_Rect srcEnd, srcStart, srcSquare, dstSquare, dst;
 	Game* game;
-	
+		
+	const char* ScoreFontPath;	
+	int CurrentScore;
 	const int OptionsDiff;
 	StartOptions option; 
 	MENU mode;
@@ -37,5 +40,6 @@ public:
 	void render();
 	MENU Mode() const;
 	void Update();
+	void DrawScore();
 };
 

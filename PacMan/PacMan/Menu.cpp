@@ -33,6 +33,8 @@ Menu::Menu(const char* startFileName, const char* gameOverFileName, SDL_Renderer
 	dstSquare.y = 246;
 	dstSquare.w = 200;
 	dstSquare.h = 64;
+
+	ScoreFontPath = "Asserts/04B_30__.TTF";
 }
 
 
@@ -45,10 +47,21 @@ void Menu::GameOver(int Score)
 {
 	std::cout << "GameOver ... Your Score :  " << Score << '\n';
 
+	CurrentScore = Score;
+
 	mode = END;
 
 	//SDL_Delay(3000); // i will change it later
 }
+
+void Menu::DrawScore()
+{
+	SDL_Rect ScoreDst = {180, 100, 200, 200};
+	std::string Score = "Your Score : ";
+	Score += std::to_string(CurrentScore);
+	TextureManager::DrawText(ScoreFontPath, Score.c_str(), ScoreDst, renderer, 36);
+}
+
 
 void Menu::Update()
 {
@@ -73,7 +86,7 @@ void Menu::Play()
 void Menu::render()
 {
 	if (Mode() == END)
-		TextureManager::Draw(gameOverMenu, srcEnd, dst, renderer);
+		TextureManager::Draw(gameOverMenu, srcEnd, dst, renderer), DrawScore();
 	if (Mode() == START)
 	{
 		TextureManager::Draw(startMenu, srcStart, dst, renderer);
