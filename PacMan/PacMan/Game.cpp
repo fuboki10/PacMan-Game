@@ -61,7 +61,7 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 				GameIsRunning = true;
 				
 				// Create Menu 
-				menu = new Menu("Asserts/StartMenu.png", "Asserts/GameOver.png", renderer, w, h, this); 
+				menu = new Menu("Assets/StartMenu.png", "Assets/GameOver.png", renderer, w, h, this); 
 
 				if (!menu)
 					throw SDL_Error;
@@ -188,7 +188,7 @@ void Game::StartGame(bool s)
 
 	if (GameIsRunning)
 	{
-		map = new Map("Asserts/Background.png", "Asserts/Heart.png", renderer, Width, Height, this);
+		map = new Map("Assets/Background.png", "Assets/Heart.png", renderer, Width, Height, this);
 				
 		if (!map)
 			throw SDL_Error;

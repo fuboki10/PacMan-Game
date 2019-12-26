@@ -6,7 +6,7 @@ Menu::Menu(const char* startFileName, const char* gameOverFileName, SDL_Renderer
 {
 	startMenu = TextureManager::LoadTexture(startFileName, renderer);
 	gameOverMenu = TextureManager::LoadTexture(gameOverFileName, renderer);
-	Square = TextureManager::LoadTexture("Asserts/Square.png", renderer);
+	Square = TextureManager::LoadTexture("Assets/Square.png", renderer);
 
 	mode = START;
 	option = Start;
@@ -34,7 +34,7 @@ Menu::Menu(const char* startFileName, const char* gameOverFileName, SDL_Renderer
 	dstSquare.w = 200;
 	dstSquare.h = 64;
 
-	ScoreFontPath = "Asserts/04B_30__.TTF";
+	ScoreFontPath = "Assets/04B_30__.TTF";
 }
 
 
