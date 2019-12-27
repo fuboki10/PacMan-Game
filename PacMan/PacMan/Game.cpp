@@ -111,6 +111,14 @@ bool Game::LoadMedia()
         success = false;
     }
 
+	//Load Sound Effects
+	gDeath = Mix_LoadWAV( "Assets/Sounds/pacman_death.wav" );
+	if (gDeath == NULL)
+	{
+		printf( "Failed to load Death Sound Effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        success = false;
+	}
+
 	return success;
 }
 
@@ -250,6 +258,8 @@ void Game::clean()
 	//Free the music
     Mix_FreeMusic( gMusic );
     gMusic = NULL;
+	Mix_FreeChunk( gDeath );
+	gDeath = NULL;
 	
 	Mix_Quit();
 	IMG_Quit();
@@ -294,6 +304,7 @@ Game::~Game(void)
 void Game::GameOver(int Score)
 {
 	GameIsRunning = false;
+	Mix_PlayChannel(-1, gDeath, 0);
 	menu->GameOver(Score);
 	StartGame(false);
 }

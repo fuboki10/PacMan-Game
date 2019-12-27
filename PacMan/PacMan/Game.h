@@ -26,6 +26,7 @@ class Game
 	SDL_Event event;
 
 	Mix_Music* gMusic;
+	Mix_Chunk* gDeath;
 
 	int Width, Height;
 	const int FPS;
