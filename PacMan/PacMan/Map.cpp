@@ -24,7 +24,7 @@ Map::Map(const char* MapName, const char* HeartName, SDL_Renderer *renderer, int
 
 	player = nullptr;
 
-	fontPath = "Assets/04B_30__.TTF";
+	fontPath = "Assets/Fonts/04B_30__.TTF";
 }
 
 void Map::DrawScore()
@@ -66,18 +66,18 @@ void Map::LoadMap(int arr[20][25])
 			switch (type)
 			{
 			case COIN:
-				c = new Coin("Assets/Coin.png", renderer, col, row, 1);
+				c = new Coin("Assets/Images/Coin.png", renderer, col, row, 1);
 				coins.push_back(c);
 				break;
 			case PLAYER:
-				player = new Player("Assets/Pac1.png", "Assets/Pac2.png", "Assets/PacUlt.png", renderer, col , row, 1, 1); 
+				player = new Player("Assets/Images/Pac1.png", "Assets/Images/Pac2.png", "Assets/Images/PacUlt.png", renderer, col , row, 1, 3); 
 				break;
 			case MONSTER:
-				m = new Monster("Assets/Monster.png", "Assets/Spirit.png", renderer, col, row, 1);
+				m = new Monster("Assets/Images/Monster.png", "Assets/Images/Spirit.png", renderer, col, row, 1);
 				monsters.push_back(m);
 				break;
 			case WALL:
-				w = new Wall("Assets/Wall.png", renderer, col, row);
+				w = new Wall("Assets/Images/Wall.png", renderer, col, row);
 				walls.push_back(w);
 				break;
 			default:
@@ -93,7 +93,7 @@ void Map::LoadMap(int arr[20][25])
 		   1       =====>        Coin
 		   2       =====>        Player
 		   3       =====>        Monster
-		   -1      =====>        Obstacle
+		   4      =====>        Obstacle
 */
 
 void Map::DrawMap()

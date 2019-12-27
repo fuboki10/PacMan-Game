@@ -6,6 +6,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include <iostream>
 #include "Map.h"
 #include "Menu.h"
@@ -23,6 +24,8 @@ class Game
 	Map* map;
 	Menu* menu;
 	SDL_Event event;
+
+	Mix_Music* gMusic;
 
 	int Width, Height;
 	const int FPS;
@@ -43,6 +46,7 @@ public:
 	void GameOver(int Score);
 	void CloseGame(bool cg);
 	void init(const char* title, int xpos, int ypos, int w, int h, bool fullscreen);
+	bool LoadMedia();
 	
 	void handleEvents();
 	void update();

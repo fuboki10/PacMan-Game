@@ -2,16 +2,24 @@
 
 bool Game::CanEat = false;
 
+/*
+           0       =====>        Nothing
+		   1       =====>        Coin
+		   2       =====>        Player
+		   3       =====>        Monster
+		   4      =====>        Obstacle
+*/
+
 int lvl1 [20][25] = {
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,0},
 	{0,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,0},
-	{0,4,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,1,1,4,0},
+	{0,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,0},
 	{0,4,1,1,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,4,0},
 	{0,4,1,1,4,1,1,1,1,1,4,4,4,4,1,1,1,1,1,4,1,1,1,4,0},
 	{0,4,1,1,4,1,1,1,4,4,4,1,1,4,1,1,3,1,1,4,1,1,1,4,0},
-	{0,4,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,4,1,1,1,4,0},
+	{0,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,4,0},
 	{0,4,1,1,1,1,1,4,4,1,1,4,4,4,4,4,4,1,1,4,1,1,1,4,0},
 	{0,4,1,1,1,1,1,4,1,1,1,1,1,1,1,1,4,1,1,4,1,1,1,4,0},
 	{0,4,1,1,1,1,1,4,1,1,1,1,4,1,1,1,1,1,1,4,1,1,1,4,0},
@@ -61,7 +69,7 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 				GameIsRunning = true;
 				
 				// Create Menu 
-				menu = new Menu("Assets/StartMenu.png", "Assets/GameOver.png", renderer, w, h, this); 
+				menu = new Menu("Assets/Images/StartMenu.png", "Assets/Images/GameOver.png", renderer, w, h, this); 
 
 				if (!menu)
 					throw SDL_Error;
@@ -74,7 +82,36 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 			throw SDL_Error;
 			SDL_Quit();
 		}
+		
+        //Initialize SDL_mixer
+        if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+        {
+			throw SDL_Error;
+			printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+			SDL_Quit();
+		}
+		if(!LoadMedia())
+		{
+			throw SDL_Error;
+		}
+
+		Mix_PlayMusic(gMusic, -1);
 	}
+}
+
+bool Game::LoadMedia()
+{
+	bool success = true;
+
+	//Load music
+    gMusic = Mix_LoadMUS( "Assets/Sounds/pacman_beginning.wav" );
+    if( gMusic == NULL )
+    {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        success = false;
+    }
+
+	return success;
 }
 
 void Game::handleEvents()
@@ -188,7 +225,7 @@ void Game::StartGame(bool s)
 
 	if (GameIsRunning)
 	{
-		map = new Map("Assets/Background.png", "Assets/Heart.png", renderer, Width, Height, this);
+		map = new Map("Assets/Images/Background.png", "Assets/Images/Heart.png", renderer, Width, Height, this);
 				
 		if (!map)
 			throw SDL_Error;
@@ -209,6 +246,12 @@ void Game::clean()
 	window = nullptr;
 	SDL_DestroyRenderer(renderer);
 	renderer = nullptr;
+
+	//Free the music
+    Mix_FreeMusic( gMusic );
+    gMusic = NULL;
+	
+	Mix_Quit();
 	IMG_Quit();
 	SDL_Quit();
 	cout << "Game Cleaned \n";
