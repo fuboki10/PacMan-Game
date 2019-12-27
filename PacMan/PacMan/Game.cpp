@@ -95,7 +95,6 @@ void Game::init(const char* title, int xpos, int ypos, int w, int h, bool fullsc
 			throw SDL_Error;
 		}
 
-		Mix_PlayMusic(gMusic, -1);
 	}
 }
 
@@ -239,6 +238,8 @@ void Game::StartGame(bool s)
 			throw SDL_Error;
 
 		map->LoadMap(lvl1);
+		
+		Mix_PlayMusic(gMusic, -1);
 	}
 }
 
@@ -305,8 +306,8 @@ void Game::GameOver(int Score)
 {
 	GameIsRunning = false;
 	Mix_PlayChannel(-1, gDeath, 0);
+	Mix_PauseMusic();
 	menu->GameOver(Score);
-	StartGame(false);
 }
 
 void Game::Ultimate(bool eat)
