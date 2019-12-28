@@ -361,6 +361,7 @@ void Map::GameOver()
 {
 	if (player->getLifes() == 1)
 	{
+		game->Ultimate(0);
 		int score = player->getScore();
 		game->GameOver(score);
 	}
